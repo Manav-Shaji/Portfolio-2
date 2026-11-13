@@ -7,8 +7,12 @@ const BackgroundFX = dynamic(
   () => import('./BackgroundFX').then((module) => module.BackgroundFX),
   { loading: () => null },
 );
-const PortfolioEffects = dynamic(
-  () => import('./PortfolioEffects').then((module) => module.PortfolioEffects),
+const SmoothScroll = dynamic(
+  () => import('./SmoothScroll').then((module) => module.SmoothScroll),
+  { loading: () => null },
+);
+const ScrollProgress = dynamic(
+  () => import('./ScrollProgress').then((module) => module.ScrollProgress),
   { loading: () => null },
 );
 const CustomCursor = dynamic(
@@ -16,7 +20,7 @@ const CustomCursor = dynamic(
   { ssr: false, loading: () => null },
 );
 
-export function EffectsLayer() {
+export function SiteEffects() {
   const [enableCursor, setEnableCursor] = useState(false);
 
   useEffect(() => {
@@ -45,8 +49,10 @@ export function EffectsLayer() {
   return (
     <>
       <BackgroundFX />
-      <PortfolioEffects />
+      <SmoothScroll />
+      <ScrollProgress />
       {enableCursor && <CustomCursor />}
+      <div className="film-grain" aria-hidden="true" />
     </>
   );
 }

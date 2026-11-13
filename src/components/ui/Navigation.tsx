@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import { Download, Menu, X } from 'lucide-react';
-import { navItems } from '../data/navigation';
+import { navItems } from '@/data/navigation';
 
 const CommandPalette = dynamic(
   () => import('./CommandPalette').then((module) => module.CommandPalette),

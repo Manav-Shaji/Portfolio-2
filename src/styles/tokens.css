@@ -1,0 +1,12 @@
+:root {
+  --bg: #050505;
+  --surface: #101312;
+  --surface-raised: #191d1b;
+  --border: rgba(237, 237, 237, 0.14);
+  --accent: #7ef0c0;
+  --accent-hover: #a4f5d4;
+  --text: #ededed;
+  --text-muted: #a1a1aa;
+  --font-sans: "Inter", "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", "SFMono-Regular", monospace;
+}

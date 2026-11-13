@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, type ReactNode } from 'react';
 
-export type RevealVariant = 'fade-up' | 'stagger' | 'mask' | 'clip';
+export type RevealVariant = 'fade' | 'fade-up' | 'stagger' | 'mask' | 'clip';
 
 type Props = {
   variant: RevealVariant;
@@ -114,7 +114,9 @@ export function Reveal({
             };
 
             const context = gsap.context(() => {
-              if (variant === 'fade-up') {
+              if (variant === 'fade') {
+                gsap.fromTo(root, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: 'power1.out' });
+              } else if (variant === 'fade-up') {
                 gsap.fromTo(
                   root,
                   { opacity: 0, y: 32 },

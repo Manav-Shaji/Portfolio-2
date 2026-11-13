@@ -8,7 +8,8 @@ export function HeroAnimation() {
   useEffect(() => {
     const introElement = introRef.current;
     const reducedMotion =
-      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+      typeof window.matchMedia !== 'function' ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reducedMotion) return;
 
     let hasVisited = false;

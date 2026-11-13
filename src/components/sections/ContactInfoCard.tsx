@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { ArrowDownToLine, Copy } from 'lucide-react';
 import { toast } from 'sonner';
-import { Reveal } from './Reveal';
-import { SocialLinks } from './SocialLinks';
+import { Reveal } from '@/components/effects/Reveal';
+import { SocialLinks } from '@/components/ui/SocialLinks';
 
 const contactEmail = 'manav.shaji.m@gmail.com';
 const services = [

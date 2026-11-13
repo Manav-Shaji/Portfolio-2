@@ -2,7 +2,7 @@
 
 import { Command } from 'cmdk';
 import { ArrowUpRight } from 'lucide-react';
-import { quickActions } from '../data/navigation';
+import { quickActions } from '@/data/navigation';
 
 type Props = {
   open: boolean;

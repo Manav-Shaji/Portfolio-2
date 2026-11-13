@@ -1,0 +1,90 @@
+.hero-terminal {
+  animation: terminal-float 6s ease-in-out infinite;
+}
+
+.terminal-cursor {
+  animation: terminal-blink 1s steps(2, start) infinite;
+}
+
+.tech-marquee {
+  position: relative;
+  left: 50%;
+  width: 100vw;
+  overflow: hidden;
+  transform: translateX(-50%);
+  border-block: 1px solid var(--border);
+  background: var(--surface);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+}
+
+.tech-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 30s linear infinite;
+}
+
+.tech-marquee:hover .tech-marquee-track {
+  animation-play-state: paused;
+}
+
+.tech-marquee[data-visible='false'] .tech-marquee-track {
+  animation-play-state: paused;
+}
+
+.background-fx[data-hero-visible='false'] .background-code-snippet {
+  animation-play-state: paused;
+}
+
+.tech-marquee-item {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 1.75rem;
+  padding: 1rem 2rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  line-height: 20px;
+  white-space: nowrap;
+}
+
+.tech-marquee-item::after {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  content: "";
+}
+
+@keyframes terminal-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes marquee-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes terminal-blink {
+  to {
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-terminal,
+  .terminal-cursor,
+  .tech-marquee-track {
+    animation: none !important;
+  }
+}
