@@ -68,7 +68,7 @@ export function ContactForm() {
       />
       <Reveal
         variant="stagger"
-        className="contact-form-fields grid gap-5 md:grid-cols-2"
+        className="flow-root"
       >
         <div>
           <label htmlFor="name" className="mb-2 block text-sm text-[var(--text-muted)]">

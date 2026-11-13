@@ -38,7 +38,7 @@ export function SocialLinks({ size }: Props) {
           <a
             key={label}
             aria-label={label}
-            className="social-link"
+            className={`social-link ${size === 'sm' ? 'size-8 max-md:size-11' : 'size-10'}`}
             href={href}
             rel={isEmail ? undefined : 'noreferrer'}
             target={isEmail ? undefined : '_blank'}

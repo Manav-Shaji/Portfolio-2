@@ -1,5 +1,7 @@
 :root {
   --bg: #050505;
+  --black: #000;
+  --white: #fff;
   --surface: #101312;
   --surface-raised: #191d1b;
   --border: rgba(237, 237, 237, 0.14);

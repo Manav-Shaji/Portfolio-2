@@ -26,9 +26,7 @@ export function Footer() {
             © 2026 Manav Shaji
           </p>
           <div className="col-start-2 row-start-2 flex items-center justify-self-start gap-3 md:col-start-3 md:row-start-1 md:justify-self-end md:gap-4">
-            <div className="site-footer-social">
-              <SocialLinks size="sm" />
-            </div>
+            <SocialLinks size="sm" />
             <a
               href="#home"
               className="group hidden min-h-11 items-center gap-1 whitespace-nowrap font-mono text-[13px] text-[var(--text-muted)] transition-colors hover:text-[var(--text)] md:inline-flex"

@@ -33,7 +33,7 @@ export function Work() {
               <div className="project-visual">
                 <Reveal
                   variant="clip"
-                  className="project-preview-clip"
+                  className="block w-full"
                   parallax
                   aria-hidden={true}
                 >

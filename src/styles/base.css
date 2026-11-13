@@ -1,6 +1,6 @@
 * {
   box-sizing: border-box;
-  scrollbar-color: rgba(126, 240, 192, 0.45) var(--bg);
+  scrollbar-color: color-mix(in srgb, var(--accent) 45%, transparent) var(--bg);
   scrollbar-width: thin;
 }
 
@@ -35,7 +35,7 @@ footer {
 }
 
 ::selection {
-  background: rgba(126, 240, 192, 0.35);
+  background: color-mix(in srgb, var(--accent) 35%, transparent);
   color: var(--text);
 }
 
@@ -53,11 +53,6 @@ button,
 input,
 textarea {
   font: inherit;
-}
-
-.mint-cta {
-  color: #050505;
-  font-weight: 600;
 }
 
 a:focus-visible,
@@ -89,7 +84,7 @@ button.rounded-full:focus-visible,
 ::-webkit-scrollbar-thumb {
   border: 2px solid var(--bg);
   border-radius: 8px;
-  background: rgba(126, 240, 192, 0.45);
+  background: color-mix(in srgb, var(--accent) 45%, transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {

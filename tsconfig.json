@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ES6"
-    ],
+    "lib": ["DOM", "DOM.Iterable", "ES6"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -14,20 +10,12 @@
     "noFallthroughCasesInSwitch": true,
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "baseUrl": ".",
+    "ignoreDeprecations": "5.0",
     "paths": {
-      "@/components/*": [
-        "src/components/*"
-      ],
-      "@/hooks/*": [
-        "src/hooks/*"
-      ],
-      "@/data/*": [
-        "src/data/*"
-      ],
-      "@/lib/*": [
-        "src/lib/*"
-      ]
+      "@/components/*": ["./src/components/*"],
+      "@/hooks/*": ["./src/hooks/*"],
+      "@/data/*": ["./src/data/*"],
+      "@/lib/*": ["./src/lib/*"]
     },
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -36,9 +24,7 @@
     "sourceMap": true,
     "outDir": "./dist/",
     "jsx": "react-jsx",
-    "types": [
-      "vitest/globals"
-    ],
+    "types": ["vitest/globals"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "noImplicitReturns": true,
@@ -53,13 +39,6 @@
       }
     ]
   },
-  "include": [
-    "src/**/*",
-    ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    ".next/dev/types/**/*.ts"
-  ]
+  "include": ["src/**/*", ".next/types/**/*.ts", ".next/dev/types/**/*.ts"],
+  "exclude": ["node_modules", ".next/dev/types/**/*.ts"]
 }

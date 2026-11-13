@@ -216,7 +216,7 @@ export function Reveal({
         )}
       </>
     ) : variant === 'clip' && parallax ? (
-      <div ref={parallaxContentRef} className="reveal-parallax-content">
+      <div ref={parallaxContentRef} className="block w-full">
         {children}
       </div>
     ) : (

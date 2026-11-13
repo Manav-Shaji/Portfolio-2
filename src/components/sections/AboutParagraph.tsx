@@ -70,7 +70,7 @@ export function AboutParagraph({ text }: Props) {
       className="about-scroll-paragraph max-w-xl text-lg leading-8 text-[var(--text-muted)]"
     >
       {words.map((word, index) => (
-        <span className="about-scroll-word" key={`${word}-${index}`}>
+        <span className="about-scroll-word opacity-100" key={`${word}-${index}`}>
           {word}{index < words.length - 1 ? ' ' : ''}
         </span>
       ))}
