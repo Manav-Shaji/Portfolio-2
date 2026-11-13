@@ -4,6 +4,17 @@ const linkedin = 'https://www.linkedin.com/in/manavshaji/';
 
 export const site = {
   linkedin,
+  marquee: [
+    'React',
+    'Next.js',
+    'TypeScript',
+    'Tailwind CSS',
+    'GSAP',
+    'Motion',
+    'Node.js',
+    'Python',
+    'PostgreSQL',
+  ],
   socials: [
     {
       label: 'GitHub',

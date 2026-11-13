@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter, Geist_Mono } from 'next/font/google';
+import { Instrument_Serif, Inter, Geist_Mono } from 'next/font/google';
 import { Toaster } from 'sonner';
 import './globals.css';
 
@@ -13,6 +13,13 @@ const geistMono = Geist_Mono({
   variable: '--font-mono',
 });
 
+const instrumentSerif = Instrument_Serif({
+  subsets: ['latin'],
+  weight: '400',
+  style: ['italic'],
+  variable: '--font-serif',
+});
+
 export const metadata: Metadata = {
   title: 'Manav Shaji | Full-Stack Developer',
   description:
@@ -21,7 +28,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${geistMono.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${inter.variable} ${geistMono.variable} ${instrumentSerif.variable}`}
+      suppressHydrationWarning
+    >
       <body className="min-h-screen bg-[var(--bg)] text-[var(--text)] antialiased">
         {children}
         <Toaster richColors position="top-right" />
