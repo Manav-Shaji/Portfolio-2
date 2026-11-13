@@ -75,4 +75,4 @@ Add a group or update its items in [`src/data/skills.ts`](./src/data/skills.ts).
 
 ## Resume
 
-Resume links remain hidden until `public/resume.pdf` exists and `site.resumeUrl` is set to `'/resume.pdf'`. See [`public/README.md`](./public/README.md) for details.
+Resume links point to the current `public/Resume.pdf` file via `site.resumeUrl` in [`src/data/site.ts`](./src/data/site.ts). The URL must match the filename's capitalization. See [`public/README.md`](./public/README.md) for details.

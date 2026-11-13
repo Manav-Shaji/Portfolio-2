@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { ArrowDownToLine, Copy } from 'lucide-react';
 import { toast } from 'sonner';
 import { Reveal } from '@/components/effects/Reveal';
-import { SocialLinks } from '@/components/ui/SocialLinks';
 import { site } from '@/data/site';
 
 const services = [
@@ -173,19 +172,18 @@ export function ContactInfoCard() {
           </ul>
         </div>
 
-        <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-2">
-          <SocialLinks size="md" />
-          {site.resumeUrl !== null && (
+        {site.resumeUrl !== null && (
+          <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-2">
             <a
               href={site.resumeUrl}
               download
-              className="inline-flex min-h-10 items-center gap-1.5 text-sm font-medium text-[var(--text)] transition-colors hover:text-[var(--accent)]"
+              className="mint-cta premium-border inline-flex min-h-11 items-center gap-2 rounded-full bg-[var(--accent)] px-5 py-3 text-sm font-medium text-[#050505] transition-colors hover:bg-[var(--accent-hover)] hover:brightness-110 hover:shadow-[0_0_20px_rgba(126,240,192,0.2)]"
             >
               Download resume
               <ArrowDownToLine aria-hidden="true" size={16} />
             </a>
-          )}
-        </div>
+          </div>
+        )}
       </Reveal>
     </article>
   );

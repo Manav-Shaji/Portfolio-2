@@ -14,8 +14,7 @@ export const aboutStatement =
 const siteData = {
   email: 'manav.shaji.m@gmail.com',
   linkedin,
-  // Set to '/resume.pdf' once public/resume.pdf is added.
-  resumeUrl: null as string | null,
+  resumeUrl: '/Resume.pdf' as string | null,
   marquee: [
     'React',
     'Next.js',

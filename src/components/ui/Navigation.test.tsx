@@ -42,6 +42,20 @@ function renderNavigation() {
 }
 
 describe('Navigation', () => {
+  it('does not render a Quick nav button', () => {
+    renderNavigation();
+
+    expect(screen.queryByRole('button', { name: /Quick nav/ })).not.toBeInTheDocument();
+  });
+
+  it('renders the configured resume download link', () => {
+    renderNavigation();
+
+    const resumeLink = screen.getByRole('link', { name: 'Resume' });
+    expect(resumeLink).toHaveAttribute('href', '/Resume.pdf');
+    expect(resumeLink).toHaveAttribute('download');
+  });
+
   it('scrolls to and focuses a section from a navigation link', async () => {
     const scrollIntoView = Element.prototype.scrollIntoView;
     renderNavigation();
@@ -55,15 +69,23 @@ describe('Navigation', () => {
     await waitFor(() => expect(section).toHaveFocus());
   });
 
-  it('scrolls to and focuses a section from the command palette', async () => {
+  it('does not open command navigation from Cmd+K or Ctrl+K', () => {
     renderNavigation();
-    fireEvent.click(screen.getByRole('button', { name: /Quick nav/ }));
+    fireEvent.keyDown(window, { key: 'k', metaKey: true });
+    fireEvent.keyDown(window, { key: 'k', ctrlKey: true });
 
-    const commandItem = await screen.findByRole('option', { name: 'About me' });
-    fireEvent.click(commandItem);
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
 
-    const section = document.getElementById('about');
-    expect(section).toHaveAttribute('tabindex', '-1');
-    await waitFor(() => expect(section).toHaveFocus());
+  it('closes the mobile menu with Escape', () => {
+    renderNavigation();
+    const menuButton = screen.getByRole('button', { name: 'Toggle mobile navigation' });
+
+    fireEvent.click(menuButton);
+    expect(menuButton).toHaveAttribute('aria-expanded', 'true');
+
+    fireEvent.keyDown(window, { key: 'Escape' });
+
+    expect(menuButton).toHaveAttribute('aria-expanded', 'false');
   });
 });

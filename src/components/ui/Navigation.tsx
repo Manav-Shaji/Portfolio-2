@@ -1,6 +1,5 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import type { MouseEvent } from 'react';
 import { Download, Menu, X } from 'lucide-react';
@@ -8,11 +7,6 @@ import { navItems } from '@/data/navigation';
 import { site } from '@/data/site';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { getLenisInstance } from '@/lib/scroll';
-
-const CommandPalette = dynamic(
-  () => import('./CommandPalette').then((module) => module.CommandPalette),
-  { ssr: false },
-);
 
 function scrollToSection(id: string, reducedMotion: boolean) {
   const section = document.getElementById(id);
@@ -40,7 +34,6 @@ export function Navigation() {
   const reducedMotion = usePrefersReducedMotion();
   const [activeSection, setActiveSection] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
-  const [commandOpen, setCommandOpen] = useState(false);
 
   useEffect(() => {
     if (typeof IntersectionObserver === 'undefined') {
@@ -105,13 +98,7 @@ export function Navigation() {
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
-        event.preventDefault();
-        setCommandOpen((current) => !current);
-      }
-
       if (event.key === 'Escape') {
-        setCommandOpen(false);
         setMenuOpen(false);
       }
     };
@@ -123,7 +110,6 @@ export function Navigation() {
   const navigateTo = (id: string) => {
     scrollToSection(id, reducedMotion);
     setMenuOpen(false);
-    setCommandOpen(false);
   };
 
   const handleSectionLinkClick = (event: MouseEvent<HTMLAnchorElement>, id: string) => {
@@ -161,27 +147,23 @@ export function Navigation() {
                   href={`#${item.id}`}
                   aria-current={activeSection === item.id ? 'location' : undefined}
                   onClick={(event) => handleSectionLinkClick(event, item.id)}
-                  className={`relative text-sm text-[var(--text-muted)] transition-colors duration-200 hover:text-[var(--text)] ${
+                  className={`group relative text-sm text-[var(--text-muted)] transition-colors duration-200 hover:text-[var(--text)] ${
                     activeSection === item.id ? 'text-[var(--text)]' : ''
                   }`}
                 >
                   {item.label}
-                  {activeSection === item.id && (
-                    <span className="absolute -bottom-2 left-0 h-px w-full bg-[var(--accent)]" />
-                  )}
+                  <span
+                    className={`absolute -bottom-2 left-0 h-px w-full origin-center bg-[var(--accent)] transition-[transform,opacity] duration-200 motion-reduce:transition-none ${
+                      activeSection === item.id
+                        ? 'scale-x-100 opacity-100'
+                        : 'scale-x-0 opacity-0 group-hover:scale-x-100 group-hover:opacity-100 group-focus-visible:scale-x-100 group-focus-visible:opacity-100'
+                    }`}
+                  />
                 </a>
               ))}
             </div>
 
             <div className="hidden items-center gap-3 md:flex">
-              <button
-                type="button"
-                onClick={() => setCommandOpen(true)}
-                className="premium-border inline-flex items-center gap-2 rounded-full border border-[var(--border)] px-3 py-1.5 text-xs font-medium text-[var(--text-muted)] transition-colors hover:border-[var(--accent)] hover:text-[var(--text)]"
-              >
-                <span className="font-mono text-[0.75rem]">⌘K</span>
-                Quick nav
-              </button>
               {site.resumeUrl !== null && (
                 <a
                   href={site.resumeUrl}
@@ -237,13 +219,6 @@ export function Navigation() {
           )}
         </div>
       </header>
-      {commandOpen && (
-        <CommandPalette
-          open={commandOpen}
-          onOpenChange={setCommandOpen}
-          onNavigate={navigateTo}
-        />
-      )}
     </>
   );
 }

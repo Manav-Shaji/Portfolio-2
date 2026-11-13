@@ -33,11 +33,12 @@ describe('Contact', () => {
       `mailto:${site.email}`,
     );
     expect(card.getByRole('button', { name: 'Copy email address' })).toBeInTheDocument();
+    expect(card.queryByRole('group', { name: 'Social links' })).not.toBeInTheDocument();
     expect(card.getByRole('timer', { name: 'Local time in Kerala' })).toHaveTextContent(
       /^(?:--:--|(?:1[0-2]|[1-9]):[0-5]\d [AP]M) IST$/,
     );
     expect(card.getByText('Usually within a few days')).toBeInTheDocument();
-    expect(site.resumeUrl).toBeNull();
+    expect(site.resumeUrl).toBe('/Resume.pdf');
     if (site.resumeUrl !== null) {
       const resumeLink = card.getByRole('link', { name: 'Download resume' });
       expect(resumeLink).toHaveAttribute('href', site.resumeUrl);
