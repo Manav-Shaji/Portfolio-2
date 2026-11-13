@@ -21,6 +21,7 @@ export function CustomCursor() {
     let ringY = 0;
     let latestTarget: Element | null = null;
     let activeProject: HTMLElement | null = null;
+    let activeProjectBounds: DOMRect | null = null;
 
     const resetProjectTilt = () => {
       if (!activeProject) return;
@@ -31,6 +32,7 @@ export function CustomCursor() {
       preview?.style.setProperty('--parallax-x', '0px');
       preview?.style.setProperty('--parallax-y', '0px');
       activeProject = null;
+      activeProjectBounds = null;
     };
 
     const animateCursor = () => {
@@ -49,10 +51,13 @@ export function CustomCursor() {
       if (isFormControl) {
         resetProjectTilt();
       } else if (project) {
-        if (activeProject && activeProject !== project) resetProjectTilt();
-        activeProject = project;
+        if (activeProject !== project) {
+          resetProjectTilt();
+          activeProject = project;
+        }
+        activeProjectBounds ??= project.getBoundingClientRect();
         const preview = project.querySelector<HTMLElement>('.project-preview');
-        const bounds = project.getBoundingClientRect();
+        const bounds = activeProjectBounds;
         const tiltX = ((targetX - bounds.left) / bounds.width - 0.5) * 8;
         const tiltY = (0.5 - (targetY - bounds.top) / bounds.height) * 8;
         preview?.style.setProperty('--tilt-x', `${tiltX}deg`);
@@ -98,13 +103,21 @@ export function CustomCursor() {
       resetProjectTilt();
     };
 
+    const invalidateProjectBounds = () => {
+      activeProjectBounds = null;
+    };
+
     document.documentElement.dataset.customCursor = 'true';
     window.addEventListener('pointermove', handlePointerMove, { passive: true });
     window.addEventListener('pointerout', handlePointerOut, { passive: true });
+    window.addEventListener('scroll', invalidateProjectBounds, { passive: true });
+    window.addEventListener('resize', invalidateProjectBounds, { passive: true });
 
     return () => {
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerout', handlePointerOut);
+      window.removeEventListener('scroll', invalidateProjectBounds);
+      window.removeEventListener('resize', invalidateProjectBounds);
       if (frame !== null) window.cancelAnimationFrame(frame);
       delete document.documentElement.dataset.customCursor;
       resetProjectTilt();

@@ -33,17 +33,28 @@ export function BackgroundFX() {
     let animationFrame: number | null = null;
     let pointerX = 0;
     let pointerY = 0;
-    const heroObserver = hero
+    const heroObserver = hero && typeof IntersectionObserver !== 'undefined'
       ? new IntersectionObserver(([entry]) => {
           if (entry) {
             background.dataset.heroVisible = String(entry.isIntersecting);
+            hero.dataset.heroVisible = String(entry.isIntersecting);
           }
         })
       : null;
 
     if (hero && heroObserver) {
       heroObserver.observe(hero);
+    } else if (hero) {
+      background.dataset.heroVisible = 'true';
+      hero.dataset.heroVisible = 'true';
     }
+
+    const updatePageVisibility = () => {
+      document.documentElement.dataset.pageHidden = String(document.hidden);
+    };
+
+    updatePageVisibility();
+    document.addEventListener('visibilitychange', updatePageVisibility);
 
     const handlePointerMove = (event: PointerEvent) => {
       if (event.pointerType === 'touch') {
@@ -87,6 +98,8 @@ export function BackgroundFX() {
 
     return () => {
       heroObserver?.disconnect();
+      document.removeEventListener('visibilitychange', updatePageVisibility);
+      delete document.documentElement.dataset.pageHidden;
 
       if (animationFrame !== null) {
         window.cancelAnimationFrame(animationFrame);

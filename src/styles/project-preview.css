@@ -18,12 +18,12 @@
     transform 260ms ease-out,
     border-color 260ms ease,
     box-shadow 260ms ease;
-  will-change: transform;
 }
 
 .project-card:hover .project-preview {
   border-color: rgba(126, 240, 192, 0.48);
   box-shadow: 0 0 30px rgba(126, 240, 192, 0.12);
+  will-change: transform;
 }
 
 .preview-window {

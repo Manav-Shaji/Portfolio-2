@@ -89,7 +89,7 @@ export function Reveal({
 
   useEffect(() => {
     const root = rootRef.current;
-    if (!root || prefersReducedMotion) return;
+    if (!root || prefersReducedMotion || typeof IntersectionObserver === 'undefined') return;
 
     let cancelled = false;
     let revertAnimation: (() => void) | undefined;
@@ -185,7 +185,6 @@ export function Reveal({
 
             revertAnimation = () => context.revert();
             refreshAfterFontsLoad();
-            ScrollTrigger.refresh();
           },
         );
       },

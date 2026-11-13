@@ -34,11 +34,11 @@ function copyWithFallback(value: string): boolean {
 }
 
 function getKolkataTime(): string {
-  return new Intl.DateTimeFormat('en-GB', {
+  return new Intl.DateTimeFormat('en-US', {
     timeZone: 'Asia/Kolkata',
-    hour: '2-digit',
+    hour: 'numeric',
     minute: '2-digit',
-    hourCycle: 'h23',
+    hourCycle: 'h12',
   }).format(new Date());
 }
 

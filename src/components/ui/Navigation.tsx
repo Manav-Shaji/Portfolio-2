@@ -24,11 +24,48 @@ function scrollToSection(id: string, reducedMotion: boolean) {
 
 export function Navigation() {
   const reducedMotion = usePrefersReducedMotion();
-  const [activeSection, setActiveSection] = useState('work');
+  const [activeSection, setActiveSection] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
   const [commandOpen, setCommandOpen] = useState(false);
 
   useEffect(() => {
+    if (typeof IntersectionObserver === 'undefined') {
+      let animationFrame: number | null = null;
+
+      const updateActiveSection = () => {
+        animationFrame = null;
+        const markerY = window.innerHeight * 0.35;
+        let currentSection = '';
+
+        navItems.forEach((item) => {
+          const section = document.getElementById(item.id);
+          if (section && section.getBoundingClientRect().top <= markerY) {
+            currentSection = item.id;
+          }
+        });
+
+        setActiveSection(currentSection);
+      };
+
+      const scheduleUpdate = () => {
+        if (animationFrame === null) {
+          animationFrame = window.requestAnimationFrame(updateActiveSection);
+        }
+      };
+
+      window.addEventListener('scroll', scheduleUpdate, { passive: true });
+      window.addEventListener('resize', scheduleUpdate, { passive: true });
+      scheduleUpdate();
+
+      return () => {
+        window.removeEventListener('scroll', scheduleUpdate);
+        window.removeEventListener('resize', scheduleUpdate);
+        if (animationFrame !== null) {
+          window.cancelAnimationFrame(animationFrame);
+        }
+      };
+    }
+
     const sectionIds: string[] = [...navItems.map((item) => item.id), 'home'];
     const observer = new IntersectionObserver(
       (entries) => {

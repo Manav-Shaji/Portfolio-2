@@ -8,63 +8,38 @@ export function HeroAnimation() {
   const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
+    const root = document.getElementById('home');
     const introElement = introRef.current;
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion || !root) return;
 
     let hasVisited = false;
     try {
       hasVisited = window.sessionStorage.getItem('portfolio-intro-seen') !== null;
-      if (!hasVisited) {
-        window.sessionStorage.setItem('portfolio-intro-seen', 'true');
-      }
     } catch (error) {
       if (!(error instanceof DOMException)) throw error;
       hasVisited = true;
     }
 
-    if (!hasVisited && introElement) {
+    if (hasVisited) return;
+
+    root.dataset.heroIntro = 'true';
+    if (introElement) {
       introElement.dataset.active = 'true';
     }
 
-    let cancelled = false;
-    let revertAnimation: (() => void) | undefined;
-    let cancelIntro: (() => void) | undefined;
-    void import('gsap').then(({ default: gsap }) => {
-      if (cancelled) return;
-
-      const root = document.getElementById('home');
-      if (!root) return;
-
-      const context = gsap.context(() => {
-        gsap.from('.hero-word', {
-          y: 32,
-          opacity: 0,
-          duration: 0.8,
-          stagger: 0.12,
-          ease: 'power3.out',
-        });
-        gsap.from('.hero-meta, .hero-actions', {
-          y: 18,
-          opacity: 0,
-          duration: 0.7,
-          ease: 'power3.out',
-          stagger: 0.12,
-        });
-
-        if (!hasVisited) {
-          const intro = gsap.delayedCall(1.2, () => {
-            if (introElement) introElement.dataset.active = 'false';
-          });
-          cancelIntro = () => intro.kill();
-        }
-      }, root);
-      revertAnimation = () => context.revert();
-    });
+    const introTimeout = window.setTimeout(() => {
+      delete root.dataset.heroIntro;
+      if (introElement) introElement.dataset.active = 'false';
+      try {
+        window.sessionStorage.setItem('portfolio-intro-seen', 'true');
+      } catch (error) {
+        if (!(error instanceof DOMException)) throw error;
+      }
+    }, 1200);
 
     return () => {
-      cancelled = true;
-      cancelIntro?.();
-      revertAnimation?.();
+      window.clearTimeout(introTimeout);
+      delete root.dataset.heroIntro;
       if (introElement) introElement.dataset.active = 'false';
     };
   }, [prefersReducedMotion]);

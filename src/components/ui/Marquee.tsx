@@ -12,6 +12,10 @@ export function Marquee({ items }: Props) {
   useEffect(() => {
     const marquee = marqueeRef.current;
     if (!marquee) return;
+    if (typeof IntersectionObserver === 'undefined') {
+      marquee.dataset.visible = 'true';
+      return;
+    }
 
     const observer = new IntersectionObserver(([entry]) => {
       marquee.dataset.visible = String(entry?.isIntersecting ?? false);

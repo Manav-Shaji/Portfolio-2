@@ -13,7 +13,7 @@ export function AboutParagraph({ text }: Props) {
 
   useEffect(() => {
     const paragraph = paragraphRef.current;
-    if (!paragraph || prefersReducedMotion) return;
+    if (!paragraph || prefersReducedMotion || typeof IntersectionObserver === 'undefined') return;
 
     let cancelled = false;
     let revertAnimation: (() => void) | undefined;
@@ -48,7 +48,6 @@ export function AboutParagraph({ text }: Props) {
             }, paragraph);
 
             revertAnimation = () => context.revert();
-            ScrollTrigger.refresh();
           },
         );
       },

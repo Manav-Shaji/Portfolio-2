@@ -1,10 +1,6 @@
-import dynamic from 'next/dynamic';
 import { Reveal } from '@/components/effects/Reveal';
 import { ContactInfoCard } from './ContactInfoCard';
-
-const ContactForm = dynamic(
-  () => import('./ContactForm').then((module) => module.ContactForm),
-);
+import { ContactFormLoader } from './ContactFormLoader';
 
 export function Contact() {
   return (
@@ -25,7 +21,7 @@ export function Contact() {
 
       <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
         <ContactInfoCard />
-        <ContactForm />
+        <ContactFormLoader />
       </div>
     </section>
   );

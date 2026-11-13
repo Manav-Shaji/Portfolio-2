@@ -1,9 +1,10 @@
-import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, beforeEach, vi } from 'vitest';
 import { toast } from 'sonner';
 import { site } from '@/data/site';
 import { Contact } from './Contact';
 import { ContactForm } from './ContactForm';
+import { ContactFormLoader } from './ContactFormLoader';
 
 vi.mock('sonner', () => ({
   toast: {
@@ -33,7 +34,7 @@ describe('Contact', () => {
     );
     expect(card.getByRole('button', { name: 'Copy email address' })).toBeInTheDocument();
     expect(card.getByRole('timer', { name: 'Local time in Kerala' })).toHaveTextContent(
-      /^(?:--:--|\d{2}:\d{2}) IST$/,
+      /^(?:--:--|(?:1[0-2]|[1-9]):[0-5]\d [AP]M) IST$/,
     );
     expect(card.getByText('Usually within 24 hours')).toBeInTheDocument();
     const resumeLink = card.getByRole('link', { name: 'Download resume' });
@@ -98,6 +99,67 @@ describe('Contact', () => {
       expect(toast.success).toHaveBeenCalledWith(
         'Message sent — I will get back to you soon.',
       );
+    });
+  });
+
+  describe('ContactFormLoader', () => {
+    it('loads the form when its placeholder approaches the viewport', async () => {
+      let formObserver: TestIntersectionObserver | undefined;
+
+      class TestIntersectionObserver implements IntersectionObserver {
+        readonly root: Element | Document | null = null;
+        readonly rootMargin: string;
+        readonly thresholds: ReadonlyArray<number> = [];
+
+        constructor(
+          private readonly callback: IntersectionObserverCallback,
+          options?: IntersectionObserverInit,
+        ) {
+          this.rootMargin = options?.rootMargin ?? '0px';
+          if (this.rootMargin === '600px 0px') formObserver = this;
+        }
+
+        observe() {}
+        unobserve() {}
+        disconnect() {}
+        takeRecords(): IntersectionObserverEntry[] {
+          return [];
+        }
+
+        trigger(target: Element) {
+          this.callback(
+            [
+              {
+                boundingClientRect: new DOMRectReadOnly(),
+                intersectionRatio: 1,
+                intersectionRect: new DOMRectReadOnly(),
+                isIntersecting: true,
+                rootBounds: null,
+                target,
+                time: performance.now(),
+              },
+            ],
+            this,
+          );
+        }
+      }
+
+      vi.stubGlobal('IntersectionObserver', TestIntersectionObserver);
+      const { container } = render(<ContactFormLoader />);
+
+      expect(screen.queryByRole('button', { name: 'Send message' })).not.toBeInTheDocument();
+
+      act(() => formObserver?.trigger(container.firstElementChild!));
+
+      expect(await screen.findByRole('button', { name: 'Send message' })).toBeVisible();
+    });
+
+    it('loads the form immediately when IntersectionObserver is unavailable', async () => {
+      vi.stubGlobal('IntersectionObserver', undefined);
+
+      render(<ContactFormLoader />);
+
+      expect(await screen.findByRole('button', { name: 'Send message' })).toBeVisible();
     });
   });
 

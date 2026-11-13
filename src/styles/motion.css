@@ -142,16 +142,15 @@ html[data-custom-cursor="true"] [contenteditable="true"] {
   display: grid;
   place-items: center;
   pointer-events: none;
-  animation: intro-screen-out 1.2s ease forwards;
 }
 
 .intro-screen[data-active="false"] {
   visibility: hidden;
-  animation: none;
 }
 
 .intro-screen[data-active="true"] {
   visibility: visible;
+  animation: intro-screen-out 1.2s ease forwards;
 }
 
 .intro-screen span {
@@ -159,7 +158,38 @@ html[data-custom-cursor="true"] [contenteditable="true"] {
   font-family: var(--font-mono);
   font-size: 13px;
   letter-spacing: 0.08em;
+}
+
+.intro-screen[data-active="true"] span {
   animation: intro-copy-out 1.2s ease forwards;
+}
+
+#home[data-hero-intro="true"] .hero-meta,
+#home[data-hero-intro="true"] .hero-actions {
+  animation: hero-content-in 0.7s cubic-bezier(0.33, 1, 0.68, 1) both;
+}
+
+#home[data-hero-intro="true"] .max-w-4xl > p.hero-actions {
+  animation-delay: 120ms;
+}
+
+#home[data-hero-intro="true"] .max-w-4xl > div.hero-actions:nth-of-type(1) {
+  animation-delay: 240ms;
+}
+
+#home[data-hero-intro="true"] .max-w-4xl > div.hero-actions:nth-of-type(2) {
+  animation-delay: 360ms;
+}
+
+@keyframes hero-content-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes intro-screen-out {
@@ -188,6 +218,11 @@ html[data-custom-cursor="true"] [contenteditable="true"] {
   .intro-screen,
   .intro-screen span {
     animation: none;
+  }
+
+  .hero-meta,
+  .hero-actions {
+    animation: none !important;
   }
 
   .custom-cursor,

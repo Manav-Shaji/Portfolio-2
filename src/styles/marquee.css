@@ -32,6 +32,18 @@
   animation-play-state: paused;
 }
 
+#home > section[data-hero-visible='false'] .hero-terminal,
+#home > section[data-hero-visible='false'] .terminal-cursor {
+  animation-play-state: paused;
+}
+
+html[data-page-hidden='true'] .hero-terminal,
+html[data-page-hidden='true'] .terminal-cursor,
+html[data-page-hidden='true'] .tech-marquee-track,
+html[data-page-hidden='true'] .background-code-snippet {
+  animation-play-state: paused;
+}
+
 .background-fx[data-hero-visible='false'] .background-code-snippet {
   animation-play-state: paused;
 }
