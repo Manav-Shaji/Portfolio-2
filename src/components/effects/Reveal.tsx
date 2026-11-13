@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, type ReactNode } from 'react';
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 export type RevealVariant = 'fade' | 'fade-up' | 'stagger' | 'mask' | 'clip';
 
@@ -77,6 +78,7 @@ export function Reveal({
   underline = false,
   'aria-hidden': ariaHidden,
 }: Props) {
+  const prefersReducedMotion = usePrefersReducedMotion();
   const rootRef = useRef<HTMLElement | null>(null);
   const maskContentRef = useRef<HTMLSpanElement | null>(null);
   const underlineRef = useRef<HTMLSpanElement | null>(null);
@@ -87,12 +89,7 @@ export function Reveal({
 
   useEffect(() => {
     const root = rootRef.current;
-    const hasMatchMedia = typeof window.matchMedia === 'function';
-    const reducedMotion = hasMatchMedia
-      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      : true;
-
-    if (!root || reducedMotion || !hasMatchMedia) return;
+    if (!root || prefersReducedMotion) return;
 
     let cancelled = false;
     let revertAnimation: (() => void) | undefined;
@@ -201,7 +198,7 @@ export function Reveal({
       observer.disconnect();
       revertAnimation?.();
     };
-  }, [parallax, staggerDelay, underline, variant]);
+  }, [parallax, prefersReducedMotion, staggerDelay, underline, variant]);
 
   const content =
     variant === 'mask' ? (

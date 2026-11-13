@@ -1,7 +1,8 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
+import { useFinePointer } from '@/hooks/useFinePointer';
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 const BackgroundFX = dynamic(
   () => import('./BackgroundFX').then((module) => module.BackgroundFX),
@@ -21,30 +22,9 @@ const CustomCursor = dynamic(
 );
 
 export function SiteEffects() {
-  const [enableCursor, setEnableCursor] = useState(false);
-
-  useEffect(() => {
-    if (typeof window.matchMedia !== 'function') return;
-
-    const updateCursorAvailability = () => {
-      const reducedMotion =
-        window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
-      const finePointer =
-        window.matchMedia?.('(hover: hover) and (pointer: fine)').matches ?? false;
-      setEnableCursor(!reducedMotion && finePointer);
-    };
-
-    updateCursorAvailability();
-    const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const finePointerQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
-    reducedMotionQuery.addEventListener('change', updateCursorAvailability);
-    finePointerQuery.addEventListener('change', updateCursorAvailability);
-
-    return () => {
-      reducedMotionQuery.removeEventListener('change', updateCursorAvailability);
-      finePointerQuery.removeEventListener('change', updateCursorAvailability);
-    };
-  }, []);
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const hasFinePointer = useFinePointer();
+  const enableCursor = !prefersReducedMotion && hasFinePointer;
 
   return (
     <>

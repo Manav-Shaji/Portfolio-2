@@ -19,6 +19,9 @@
       "@/components/*": [
         "src/components/*"
       ],
+      "@/hooks/*": [
+        "src/hooks/*"
+      ],
       "@/data/*": [
         "src/data/*"
       ],

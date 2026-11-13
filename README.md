@@ -28,6 +28,7 @@ Open [http://localhost:3000](http://localhost:3000). Set the Resend values in `.
 
 | Variable | Required | Description |
 | --- | --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | No | Canonical site URL used for metadata (defaults to `http://localhost:3000`) |
 | `RESEND_API_KEY` | Yes, for delivery | Resend API key used by `/api/contact` |
 | `RESEND_FROM_EMAIL` | Yes, for delivery | Sender address on a domain verified with Resend |
 | `CONTACT_EMAIL` | Yes, for delivery | Inbox that receives portfolio messages |

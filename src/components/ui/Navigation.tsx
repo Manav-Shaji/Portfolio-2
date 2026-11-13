@@ -4,18 +4,18 @@ import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import { Download, Menu, X } from 'lucide-react';
 import { navItems } from '@/data/navigation';
+import { site } from '@/data/site';
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 const CommandPalette = dynamic(
   () => import('./CommandPalette').then((module) => module.CommandPalette),
   { ssr: false },
 );
 
-function scrollToSection(id: string) {
+function scrollToSection(id: string, reducedMotion: boolean) {
   const section = document.getElementById(id);
   if (!section) return;
 
-  const reducedMotion =
-    window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
   section.scrollIntoView({
     behavior: reducedMotion ? 'auto' : 'smooth',
     block: 'start',
@@ -23,6 +23,7 @@ function scrollToSection(id: string) {
 }
 
 export function Navigation() {
+  const reducedMotion = usePrefersReducedMotion();
   const [activeSection, setActiveSection] = useState('work');
   const [menuOpen, setMenuOpen] = useState(false);
   const [commandOpen, setCommandOpen] = useState(false);
@@ -69,7 +70,7 @@ export function Navigation() {
   }, []);
 
   const navigateTo = (id: string) => {
-    scrollToSection(id);
+    scrollToSection(id, reducedMotion);
     setMenuOpen(false);
     setCommandOpen(false);
   };
@@ -123,7 +124,8 @@ export function Navigation() {
                 Quick nav
               </button>
               <a
-                href="#contact"
+                href={site.resumeUrl}
+                download
                 className="mint-cta premium-border inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-4 py-2 text-sm text-[#050505] transition-colors hover:bg-[var(--accent-hover)] hover:brightness-110 hover:shadow-[0_0_20px_rgba(126,240,192,0.2)]"
               >
                 Resume
@@ -160,7 +162,8 @@ export function Navigation() {
                 </a>
               ))}
               <a
-                href="#contact"
+                href={site.resumeUrl}
+                download
                 onClick={() => setMenuOpen(false)}
                 className="mint-cta premium-border mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-[var(--accent)] px-4 py-2 text-sm text-[#050505] transition-[filter,box-shadow] hover:brightness-110 hover:shadow-[0_0_20px_rgba(126,240,192,0.2)]"
               >

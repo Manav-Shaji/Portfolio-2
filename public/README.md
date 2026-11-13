@@ -1,3 +1,3 @@
 # Public assets
 
-Place the downloadable resume at `public/resume.pdf`. The Contact section links to `/resume.pdf`.
+Add the downloadable resume as `public/resume.pdf`. The navigation and Contact section link to `/resume.pdf`.

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 type Props = {
   text: string;
@@ -8,12 +9,11 @@ type Props = {
 
 export function AboutParagraph({ text }: Props) {
   const paragraphRef = useRef<HTMLParagraphElement>(null);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     const paragraph = paragraphRef.current;
-    const reducedMotion =
-      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
-    if (!paragraph || reducedMotion) return;
+    if (!paragraph || prefersReducedMotion) return;
 
     let cancelled = false;
     let revertAnimation: (() => void) | undefined;
@@ -61,7 +61,7 @@ export function AboutParagraph({ text }: Props) {
       observer.disconnect();
       revertAnimation?.();
     };
-  }, []);
+  }, [prefersReducedMotion]);
 
   const words = text.split(' ');
 

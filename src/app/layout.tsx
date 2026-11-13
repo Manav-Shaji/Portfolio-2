@@ -23,10 +23,29 @@ const instrumentSerif = Instrument_Serif({
   variable: '--font-serif',
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+const siteTitle = 'Manav Shaji | Full-Stack Developer';
+const siteDescription =
+  'Developer portfolio for Manav Shaji, focusing on frontend and full-stack product engineering.';
+
 export const metadata: Metadata = {
-  title: 'Manav Shaji | Full-Stack Developer',
-  description:
-    'Developer portfolio for Manav Shaji, focusing on frontend and full-stack product engineering.',
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: siteTitle,
+    template: '%s | Manav Shaji',
+  },
+  description: siteDescription,
+  openGraph: {
+    title: siteTitle,
+    description: siteDescription,
+    type: 'website',
+    siteName: 'Manav Shaji',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: siteTitle,
+    description: siteDescription,
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

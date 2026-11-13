@@ -5,6 +5,7 @@ import { ArrowDownToLine, Copy } from 'lucide-react';
 import { toast } from 'sonner';
 import { Reveal } from '@/components/effects/Reveal';
 import { SocialLinks } from '@/components/ui/SocialLinks';
+import { site } from '@/data/site';
 
 const contactEmail = 'manav.shaji.m@gmail.com';
 const services = [
@@ -177,7 +178,7 @@ export function ContactInfoCard() {
         <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-2">
           <SocialLinks size="md" />
           <a
-            href="/resume.pdf"
+            href={site.resumeUrl}
             download
             className="inline-flex min-h-10 items-center gap-1.5 text-sm font-medium text-[var(--text)] transition-colors hover:text-[var(--accent)]"
           >

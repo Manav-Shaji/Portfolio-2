@@ -2,12 +2,13 @@
 
 import { useEffect } from 'react';
 import Lenis from 'lenis';
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 export function SmoothScroll() {
+  const prefersReducedMotion = usePrefersReducedMotion();
+
   useEffect(() => {
-    const reducedMotion =
-      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
-    if (reducedMotion) return;
+    if (prefersReducedMotion) return;
 
     let cancelled = false;
     let lenis: Lenis | null = null;
@@ -43,7 +44,7 @@ export function SmoothScroll() {
         gsap.ticker.lagSmoothing(500, 33);
       }
     };
-  }, []);
+  }, [prefersReducedMotion]);
 
   return null;
 }

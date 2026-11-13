@@ -1,6 +1,9 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { useFinePointer } from '@/hooks/useFinePointer';
+import { useIsDesktop } from '@/hooks/useIsDesktop';
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 const lineNumbers = Array.from({ length: 40 }, (_, index) =>
   String(index + 1).padStart(2, '0'),
@@ -15,6 +18,9 @@ const codeSnippets = [
 
 export function BackgroundFX() {
   const backgroundRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const hasFinePointer = useFinePointer();
+  const isDesktop = useIsDesktop();
 
   useEffect(() => {
     const background = backgroundRef.current;
@@ -38,12 +44,6 @@ export function BackgroundFX() {
     if (hero && heroObserver) {
       heroObserver.observe(hero);
     }
-
-    const prefersReducedMotion =
-      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
-    const hasFinePointer =
-      window.matchMedia?.('(hover: hover) and (pointer: fine)').matches ?? false;
-    const isDesktop = window.matchMedia?.('(min-width: 1024px)').matches ?? false;
 
     const handlePointerMove = (event: PointerEvent) => {
       if (event.pointerType === 'touch') {
@@ -95,7 +95,7 @@ export function BackgroundFX() {
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerout', handlePointerOut);
     };
-  }, []);
+  }, [hasFinePointer, isDesktop, prefersReducedMotion]);
 
   return (
     <div

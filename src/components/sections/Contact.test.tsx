@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, beforeEach, vi } from 'vitest';
 import { toast } from 'sonner';
+import { site } from '@/data/site';
 import { Contact } from './Contact';
 import { ContactForm } from './ContactForm';
 
@@ -35,10 +36,10 @@ describe('Contact', () => {
       /^(?:--:--|\d{2}:\d{2}) IST$/,
     );
     expect(card.getByText('Usually within 24 hours')).toBeInTheDocument();
-    expect(card.getByRole('link', { name: 'Download resume' })).toHaveAttribute(
-      'href',
-      '/resume.pdf',
-    );
+    const resumeLink = card.getByRole('link', { name: 'Download resume' });
+    expect(site.resumeUrl).toBe('/resume.pdf');
+    expect(resumeLink).toHaveAttribute('href', site.resumeUrl);
+    expect(resumeLink).toHaveAttribute('download');
   });
 
   it('copies the contact email and confirms success with a toast', async () => {

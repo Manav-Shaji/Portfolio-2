@@ -6,9 +6,9 @@
     "description": "Premium developer portfolio built with Next.js App Router"
   },
   "architecture": {
-    "stack": ["Next.js 15", "React 19", "TypeScript", "Tailwind CSS"],
+    "stack": ["Next.js 16", "React 19", "TypeScript", "Tailwind CSS 4"],
     "router": "App Router",
-    "styleSystem": "Tailwind CSS",
+    "styleSystem": "Tailwind CSS 4",
     "animation": ["GSAP", "Framer Motion"],
     "design": {
       "premiumCinematic": true,
@@ -16,14 +16,6 @@
       "accessibility": true,
       "performanceOptimized": true
     }
-  },
-  "worktreeMapping": {
-    "orchestrator": "claude",
-    "codex": "worker/codex-portfolio",
-    "opencode": "worker/opencode-portfolio",
-    "qwen": "worker/qwen-portfolio",
-    "mimo": "worker/mimo-portfolio",
-    "atom": "worker/atom-portfolio"
   },
   "sharedFiles": [
     "package.json",

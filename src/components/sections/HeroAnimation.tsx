@@ -1,16 +1,15 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 export function HeroAnimation() {
   const introRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     const introElement = introRef.current;
-    const reducedMotion =
-      typeof window.matchMedia !== 'function' ||
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reducedMotion) return;
+    if (prefersReducedMotion) return;
 
     let hasVisited = false;
     try {
@@ -68,7 +67,7 @@ export function HeroAnimation() {
       revertAnimation?.();
       if (introElement) introElement.dataset.active = 'false';
     };
-  }, []);
+  }, [prefersReducedMotion]);
 
   return (
     <div

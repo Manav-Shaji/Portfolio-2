@@ -13,6 +13,7 @@ export const aboutStatement =
 
 export const site = {
   linkedin,
+  resumeUrl: '/resume.pdf',
   marquee: [
     'React',
     'Next.js',

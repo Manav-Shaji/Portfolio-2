@@ -1,18 +1,18 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { useFinePointer } from '@/hooks/useFinePointer';
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 export function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const hasFinePointer = useFinePointer();
 
   useEffect(() => {
     const cursor = cursorRef.current;
-    const reducedMotion =
-      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
-    const finePointer =
-      window.matchMedia?.('(hover: hover) and (pointer: fine)').matches ?? false;
 
-    if (reducedMotion || !finePointer || !cursor) return;
+    if (prefersReducedMotion || !hasFinePointer || !cursor) return;
 
     let frame: number | null = null;
     let targetX = 0;
@@ -109,7 +109,7 @@ export function CustomCursor() {
       delete document.documentElement.dataset.customCursor;
       resetProjectTilt();
     };
-  }, []);
+  }, [hasFinePointer, prefersReducedMotion]);
 
   return (
     <div
