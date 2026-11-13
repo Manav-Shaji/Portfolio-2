@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import Lenis from 'lenis';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { setLenisInstance } from '@/lib/scroll';
 
 export function SmoothScroll() {
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -29,6 +30,7 @@ export function SmoothScroll() {
         scrollTrigger = scrollTriggerModule.ScrollTrigger;
         gsap.registerPlugin(scrollTrigger);
         lenis = new Lenis({ autoRaf: false });
+        setLenisInstance(lenis);
         lenis.on('scroll', handleScroll);
         gsap.ticker.lagSmoothing(0);
         gsap.ticker.add(raf);
@@ -37,8 +39,11 @@ export function SmoothScroll() {
 
     return () => {
       cancelled = true;
-      lenis?.off('scroll', handleScroll);
-      lenis?.destroy();
+      if (lenis) {
+        setLenisInstance(null);
+        lenis.off('scroll', handleScroll);
+        lenis.destroy();
+      }
       if (gsap) {
         gsap.ticker.remove(raf);
         gsap.ticker.lagSmoothing(500, 33);

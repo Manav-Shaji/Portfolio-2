@@ -11,9 +11,11 @@ export const introStats = [
 export const aboutStatement =
   'I enjoy turning product requirements into experiences that feel clear, polished, and reliable. My work sits at the intersection of design thinking, front-end craft, and practical engineering decisions that keep teams moving.';
 
-export const site = {
+const siteData = {
+  email: 'manav.shaji.m@gmail.com',
   linkedin,
-  resumeUrl: '/resume.pdf',
+  // Set to '/resume.pdf' once public/resume.pdf is added.
+  resumeUrl: null as string | null,
   marquee: [
     'React',
     'Next.js',
@@ -25,6 +27,10 @@ export const site = {
     'Python',
     'PostgreSQL',
   ],
+} as const;
+
+export const site = {
+  ...siteData,
   socials: [
     {
       label: 'GitHub',
@@ -38,7 +44,7 @@ export const site = {
     },
     {
       label: 'Email',
-      href: 'mailto:manavshaji.dev@gmail.com',
+      href: `mailto:${siteData.email}`,
       icon: 'mail',
     },
   ] satisfies ReadonlyArray<{

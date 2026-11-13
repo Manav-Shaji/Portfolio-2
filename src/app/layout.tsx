@@ -35,16 +35,22 @@ export const metadata: Metadata = {
     template: '%s | Manav Shaji',
   },
   description: siteDescription,
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     title: siteTitle,
     description: siteDescription,
     type: 'website',
     siteName: 'Manav Shaji',
+    url: '/',
+    images: [{ url: '/opengraph-image' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: siteTitle,
     description: siteDescription,
+    images: ['/opengraph-image'],
   },
 };
 

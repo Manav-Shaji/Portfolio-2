@@ -107,6 +107,11 @@ export function BackgroundFX() {
 
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerout', handlePointerOut);
+      delete background.dataset.heroVisible;
+      delete background.dataset.pointerActive;
+      if (hero) {
+        delete hero.dataset.heroVisible;
+      }
     };
   }, [hasFinePointer, isDesktop, prefersReducedMotion]);
 

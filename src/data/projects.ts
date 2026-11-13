@@ -3,9 +3,10 @@ export type Project = Readonly<{
   type: string;
   summary: string;
   stack: readonly string[];
+  href?: string;
 }>;
 
-export const projects = [
+export const projects: readonly Project[] = [
   {
     name: 'UrbanLedger',
     type: 'Finance dashboard',
@@ -27,4 +28,4 @@ export const projects = [
       'Crafted a high-converting brand presence with editorial storytelling, clear conversion paths, and fast, content-driven pages tuned for SEO.',
     stack: ['Next.js', 'Content model', 'Motion', 'SEO'],
   },
-] satisfies readonly Project[];
+];

@@ -1,6 +1,6 @@
 # Manav Shaji — Portfolio
 
-A portfolio built with Next.js App Router, React, TypeScript, Tailwind CSS v4, GSAP, Motion and Lenis.
+A portfolio built with Next.js App Router, React, TypeScript, Tailwind CSS v4, GSAP and Lenis.
 
 ## Setup
 
@@ -24,7 +24,6 @@ Open [http://localhost:3000](http://localhost:3000). The site can run without Re
 | `npm run lint` | Run ESLint |
 | `npm test` | Run Vitest |
 | `npm run test:watch` | Run Vitest in watch mode |
-| `npm run e2e` | Run Playwright end-to-end tests |
 
 ## Environment variables
 
@@ -41,22 +40,34 @@ The contact route validates submissions, checks a honeypot field and sends messa
 
 ```text
 src/
-├── app/                  # App Router page, layout, metadata, global CSS and API routes
+├── app/
+│   ├── api/contact/      # Contact form API route and tests
+│   ├── apple-icon.tsx
+│   ├── favicon.ico
+│   ├── globals.css
+│   ├── icon.svg
+│   ├── layout.tsx
+│   ├── opengraph-image.tsx
+│   ├── page.test.tsx
+│   └── page.tsx
 ├── components/
-│   ├── effects/          # Background, cursor, scroll and reveal behavior
-│   ├── sections/         # Hero, About, Work, Skills, Contact and Footer
+│   ├── effects/          # Background, cursor, scroll and reveal components
+│   ├── sections/         # Portfolio sections and their component tests
 │   └── ui/               # Navigation, command palette, socials and marquee
-├── data/                 # Site, navigation, project and skill content
+├── data/                 # Site, navigation, project and skill data
 ├── hooks/                # Media-query and motion-preference hooks
-├── styles/               # Design tokens, base and feature styles
-└── test/                 # Shared Vitest setup
+├── lib/                  # Contact validation and Lenis access
+├── styles/               # Design tokens, base and component styles
+└── test/setup.ts         # Shared Vitest setup
 public/
 └── README.md             # Instructions for adding the downloadable resume
 ```
 
+The contact email has one source of truth in [`src/data/site.ts`](./src/data/site.ts); contact links and related UI read it from there.
+
 ## Adding a project
 
-Add one object to [`src/data/projects.ts`](./src/data/projects.ts) with `name`, `type`, `summary` and `stack`. The Work section renders that data automatically; no component edit is needed.
+Add one object to [`src/data/projects.ts`](./src/data/projects.ts) with `name`, `type`, `summary` and `stack`. Add `href` only when the project has a real destination; cards without one are not links.
 
 ## Adding a skill
 
@@ -64,4 +75,4 @@ Add a group or update its items in [`src/data/skills.ts`](./src/data/skills.ts).
 
 ## Resume
 
-Add the PDF at `public/resume.pdf` to enable the download links in the navigation and Contact section. See [`public/README.md`](./public/README.md) for details.
+Resume links remain hidden until `public/resume.pdf` exists and `site.resumeUrl` is set to `'/resume.pdf'`. See [`public/README.md`](./public/README.md) for details.

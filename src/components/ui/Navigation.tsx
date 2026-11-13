@@ -2,10 +2,12 @@
 
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
+import type { MouseEvent } from 'react';
 import { Download, Menu, X } from 'lucide-react';
 import { navItems } from '@/data/navigation';
 import { site } from '@/data/site';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { getLenisInstance } from '@/lib/scroll';
 
 const CommandPalette = dynamic(
   () => import('./CommandPalette').then((module) => module.CommandPalette),
@@ -16,10 +18,22 @@ function scrollToSection(id: string, reducedMotion: boolean) {
   const section = document.getElementById(id);
   if (!section) return;
 
+  if (!section.hasAttribute('tabindex')) {
+    section.tabIndex = -1;
+  }
+
+  const focusSection = () => section.focus({ preventScroll: true });
+  const lenis = getLenisInstance();
+  if (lenis) {
+    lenis.scrollTo(section, { onComplete: focusSection });
+    return;
+  }
+
   section.scrollIntoView({
     behavior: reducedMotion ? 'auto' : 'smooth',
     block: 'start',
   });
+  window.requestAnimationFrame(focusSection);
 }
 
 export function Navigation() {
@@ -112,6 +126,12 @@ export function Navigation() {
     setCommandOpen(false);
   };
 
+  const handleSectionLinkClick = (event: MouseEvent<HTMLAnchorElement>, id: string) => {
+    event.preventDefault();
+    window.history.pushState(null, '', `#${id}`);
+    navigateTo(id);
+  };
+
   return (
     <>
       <header className="sticky top-0 z-40 mx-auto w-full max-w-6xl px-4 pb-2 pt-4 md:px-6">
@@ -124,6 +144,7 @@ export function Navigation() {
               href="#home"
               className="flex items-center gap-2 text-left"
               aria-label="Go to the home section"
+              onClick={(event) => handleSectionLinkClick(event, 'home')}
             >
               <span className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border)] bg-[rgba(255,255,255,0.02)] font-mono text-[0.75rem] font-medium text-[var(--accent-hover)]">
                 MS
@@ -139,6 +160,7 @@ export function Navigation() {
                   key={item.id}
                   href={`#${item.id}`}
                   aria-current={activeSection === item.id ? 'location' : undefined}
+                  onClick={(event) => handleSectionLinkClick(event, item.id)}
                   className={`relative text-sm text-[var(--text-muted)] transition-colors duration-200 hover:text-[var(--text)] ${
                     activeSection === item.id ? 'text-[var(--text)]' : ''
                   }`}
@@ -160,14 +182,16 @@ export function Navigation() {
                 <span className="font-mono text-[0.75rem]">⌘K</span>
                 Quick nav
               </button>
-              <a
-                href={site.resumeUrl}
-                download
-                className="mint-cta premium-border inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-4 py-2 text-sm text-[#050505] transition-colors hover:bg-[var(--accent-hover)] hover:brightness-110 hover:shadow-[0_0_20px_rgba(126,240,192,0.2)]"
-              >
-                Resume
-                <Download className="h-4 w-4" />
-              </a>
+              {site.resumeUrl !== null && (
+                <a
+                  href={site.resumeUrl}
+                  download
+                  className="mint-cta premium-border inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-4 py-2 text-sm text-[#050505] transition-colors hover:bg-[var(--accent-hover)] hover:brightness-110 hover:shadow-[0_0_20px_rgba(126,240,192,0.2)]"
+                >
+                  Resume
+                  <Download className="h-4 w-4" />
+                </a>
+              )}
             </div>
 
             <button
@@ -188,7 +212,7 @@ export function Navigation() {
                   key={item.id}
                   href={`#${item.id}`}
                   aria-current={activeSection === item.id ? 'location' : undefined}
-                  onClick={() => setMenuOpen(false)}
+                  onClick={(event) => handleSectionLinkClick(event, item.id)}
                   className={`rounded-full px-3 py-2 text-left text-sm text-[var(--text-muted)] transition-colors hover:bg-[rgba(255,255,255,0.02)] hover:text-[var(--text)] ${
                     activeSection === item.id
                       ? 'bg-[rgba(126,240,192,0.08)] text-[var(--text)]'
@@ -198,15 +222,17 @@ export function Navigation() {
                   {item.label}
                 </a>
               ))}
-              <a
-                href={site.resumeUrl}
-                download
-                onClick={() => setMenuOpen(false)}
-                className="mint-cta premium-border mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-[var(--accent)] px-4 py-2 text-sm text-[#050505] transition-[filter,box-shadow] hover:brightness-110 hover:shadow-[0_0_20px_rgba(126,240,192,0.2)]"
-              >
-                Resume
-                <Download className="h-4 w-4" />
-              </a>
+              {site.resumeUrl !== null && (
+                <a
+                  href={site.resumeUrl}
+                  download
+                  onClick={() => setMenuOpen(false)}
+                  className="mint-cta premium-border mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-[var(--accent)] px-4 py-2 text-sm text-[#050505] transition-[filter,box-shadow] hover:brightness-110 hover:shadow-[0_0_20px_rgba(126,240,192,0.2)]"
+                >
+                  Resume
+                  <Download className="h-4 w-4" />
+                </a>
+              )}
             </div>
           )}
         </div>

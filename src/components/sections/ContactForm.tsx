@@ -5,25 +5,17 @@ import { Send } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { Reveal } from '@/components/effects/Reveal';
-
-const contactSchema = z.object({
-  name: z.string().min(2, 'Please enter your name.'),
-  email: z.string().email('Please enter a valid email.'),
-  message: z.string().min(10, 'Tell me a bit more about your project or role.'),
-  website: z.string().optional(),
-});
+import { CONTACT_LIMITS, contactSchema } from '@/lib/contact';
+import type { ContactFormValues } from '@/lib/contact';
 
 const contactResponseSchema = z.object({
   error: z.string().optional(),
 });
 
-type ContactFormValues = z.infer<typeof contactSchema>;
-
 export function ContactForm() {
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactSchema),
-    defaultValues: { name: '', email: '', message: '', website: '' },
+    defaultValues: { name: '', email: '', message: '', company_url: '' },
   });
 
   const onSubmit = async (values: ContactFormValues) => {
@@ -59,17 +51,15 @@ export function ContactForm() {
       className="premium-border premium-card relative rounded-[28px] border border-[var(--border)] bg-[rgba(255,255,255,0.02)] p-6"
     >
       <input
-        {...form.register('website')}
+        {...form.register('company_url')}
+        name="company_url"
         type="text"
         tabIndex={-1}
         autoComplete="off"
         aria-hidden="true"
         className="absolute -left-[10000px] h-px w-px overflow-hidden"
       />
-      <Reveal
-        variant="stagger"
-        className="flow-root"
-      >
+      <div className="flow-root">
         <div>
           <label htmlFor="name" className="mb-2 block text-sm text-[var(--text-muted)]">
             Name
@@ -77,11 +67,18 @@ export function ContactForm() {
           <input
             id="name"
             {...form.register('name')}
+            maxLength={CONTACT_LIMITS.name.max}
+            autoComplete="name"
+            aria-required="true"
+            aria-invalid={Boolean(form.formState.errors.name)}
+            aria-describedby={form.formState.errors.name ? 'name-error' : undefined}
             className="w-full rounded-2xl border border-[var(--border)] bg-[rgba(5,5,5,0.72)] px-4 py-3 text-[var(--text)] outline-none transition-colors placeholder:text-[var(--text-muted)] focus:border-[var(--accent)]"
             placeholder="Your name"
           />
           {form.formState.errors.name && (
-            <p className="mt-2 text-sm text-red-300">{form.formState.errors.name.message}</p>
+            <p id="name-error" className="mt-2 text-sm text-red-300">
+              {form.formState.errors.name.message}
+            </p>
           )}
         </div>
 
@@ -93,11 +90,18 @@ export function ContactForm() {
             id="email"
             type="email"
             {...form.register('email')}
+            maxLength={CONTACT_LIMITS.email.max}
+            autoComplete="email"
+            aria-required="true"
+            aria-invalid={Boolean(form.formState.errors.email)}
+            aria-describedby={form.formState.errors.email ? 'email-error' : undefined}
             className="w-full rounded-2xl border border-[var(--border)] bg-[rgba(5,5,5,0.72)] px-4 py-3 text-[var(--text)] outline-none transition-colors placeholder:text-[var(--text-muted)] focus:border-[var(--accent)]"
             placeholder="your@email.com"
           />
           {form.formState.errors.email && (
-            <p className="mt-2 text-sm text-red-300">{form.formState.errors.email.message}</p>
+            <p id="email-error" className="mt-2 text-sm text-red-300">
+              {form.formState.errors.email.message}
+            </p>
           )}
         </div>
 
@@ -109,11 +113,17 @@ export function ContactForm() {
             id="message"
             rows={5}
             {...form.register('message')}
+            maxLength={CONTACT_LIMITS.message.max}
+            aria-required="true"
+            aria-invalid={Boolean(form.formState.errors.message)}
+            aria-describedby={form.formState.errors.message ? 'message-error' : undefined}
             className="w-full rounded-2xl border border-[var(--border)] bg-[rgba(5,5,5,0.72)] px-4 py-3 text-[var(--text)] outline-none transition-colors placeholder:text-[var(--text-muted)] focus:border-[var(--accent)]"
             placeholder="Tell me about the role, product, or problem you’re solving."
           />
           {form.formState.errors.message && (
-            <p className="mt-2 text-sm text-red-300">{form.formState.errors.message.message}</p>
+            <p id="message-error" className="mt-2 text-sm text-red-300">
+              {form.formState.errors.message.message}
+            </p>
           )}
         </div>
 
@@ -125,7 +135,7 @@ export function ContactForm() {
           {form.formState.isSubmitting ? 'Sending...' : 'Send message'}
           <Send className="h-4 w-4" />
         </button>
-      </Reveal>
+      </div>
     </form>
   );
 }

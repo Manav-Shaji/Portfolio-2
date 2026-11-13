@@ -12,7 +12,7 @@ function ContactFormPlaceholder() {
   return (
     <div
       aria-hidden="true"
-      className="premium-border premium-card min-h-[480px] rounded-[28px] border border-[var(--border)] bg-[rgba(255,255,255,0.02)]"
+      className="premium-border premium-card rounded-[28px] border border-[var(--border)] bg-[rgba(255,255,255,0.02)]"
     />
   );
 }
@@ -43,7 +43,7 @@ export function ContactFormLoader() {
   }, [shouldLoad]);
 
   return (
-    <div ref={placeholderRef} className="min-h-[480px]">
+    <div ref={placeholderRef}>
       {shouldLoad ? <ContactForm /> : <ContactFormPlaceholder />}
     </div>
   );

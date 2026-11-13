@@ -12,9 +12,6 @@ dist/
 
 # Test outputs
 coverage/
-playwright-report/
-test-results/
-blob-report/
 
 # Development
 .env*

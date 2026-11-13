@@ -7,7 +7,6 @@ import { Reveal } from '@/components/effects/Reveal';
 import { SocialLinks } from '@/components/ui/SocialLinks';
 import { site } from '@/data/site';
 
-const contactEmail = 'manav.shaji.m@gmail.com';
 const services = [
   'Frontend development',
   'Full-stack apps',
@@ -58,7 +57,7 @@ export function ContactInfoCard() {
 
     try {
       if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(contactEmail);
+        await navigator.clipboard.writeText(site.email);
         copied = true;
       }
     } catch {
@@ -67,7 +66,7 @@ export function ContactInfoCard() {
 
     if (!copied) {
       try {
-        copied = copyWithFallback(contactEmail);
+        copied = copyWithFallback(site.email);
       } catch {
         copied = false;
       }
@@ -119,10 +118,10 @@ export function ContactInfoCard() {
             <dt className="shrink-0 font-mono text-[12px] text-[var(--text-muted)]">Email</dt>
             <dd className="flex min-w-0 items-center gap-2">
               <a
-                href={`mailto:${contactEmail}`}
+                href={`mailto:${site.email}`}
                 className="whitespace-nowrap text-right text-sm font-medium text-[var(--text)] transition-colors hover:text-[var(--accent)]"
               >
-                {contactEmail}
+                {site.email}
               </a>
               <button
                 type="button"
@@ -154,8 +153,7 @@ export function ContactInfoCard() {
             <dt className="shrink-0 font-mono text-[12px] text-[var(--text-muted)]">
               Response time
             </dt>
-            {/* TODO: Confirm the response-time estimate before publishing. */}
-            <dd className="text-right text-sm text-[var(--text)]">Usually within 24 hours</dd>
+            <dd className="text-right text-sm text-[var(--text)]">Usually within a few days</dd>
           </div>
         </dl>
 
@@ -177,14 +175,16 @@ export function ContactInfoCard() {
 
         <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-2">
           <SocialLinks size="md" />
-          <a
-            href={site.resumeUrl}
-            download
-            className="inline-flex min-h-10 items-center gap-1.5 text-sm font-medium text-[var(--text)] transition-colors hover:text-[var(--accent)]"
-          >
-            Download resume
-            <ArrowDownToLine aria-hidden="true" size={16} />
-          </a>
+          {site.resumeUrl !== null && (
+            <a
+              href={site.resumeUrl}
+              download
+              className="inline-flex min-h-10 items-center gap-1.5 text-sm font-medium text-[var(--text)] transition-colors hover:text-[var(--accent)]"
+            >
+              Download resume
+              <ArrowDownToLine aria-hidden="true" size={16} />
+            </a>
+          )}
         </div>
       </Reveal>
     </article>

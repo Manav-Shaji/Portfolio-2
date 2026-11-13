@@ -10,10 +10,16 @@ import { Navigation } from '@/components/ui/Navigation';
 export default function HomePage() {
   return (
     <div className="relative isolate min-h-screen overflow-x-hidden bg-transparent text-[var(--text)]">
+      <a
+        href="#home"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-xl focus:border focus:border-[var(--border)] focus:bg-[var(--bg)] focus:px-4 focus:py-2 focus:text-[var(--text)]"
+      >
+        Skip to content
+      </a>
       <SiteEffects />
       <Navigation />
 
-      <main id="home" className="mx-auto max-w-6xl px-4 pb-0 md:px-6">
+      <main id="home" tabIndex={-1} className="mx-auto max-w-6xl px-4 pb-0 md:px-6">
         <Hero />
         <About />
         <Work />

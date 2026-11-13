@@ -423,6 +423,14 @@ html[data-page-hidden='true'] .background-code-snippet {
   box-shadow: 0 20px 60px color-mix(in srgb, var(--black) 20%, transparent);
 }
 
+.premium-border[data-project-card][data-has-link='false']:hover::after {
+  animation: none;
+}
+
+.premium-card[data-project-card][data-has-link='false']:hover {
+  box-shadow: none;
+}
+
 .gradient-divider {
   position: relative;
   border-top: 0;
@@ -486,7 +494,7 @@ html[data-page-hidden='true'] .background-code-snippet {
     box-shadow 260ms ease;
 }
 
-.project-card:hover .project-preview {
+.project-card[data-has-link='true']:hover .project-preview {
   border-color: color-mix(in srgb, var(--accent) 48%, transparent);
   box-shadow: 0 0 30px color-mix(in srgb, var(--accent) 12%, transparent);
   will-change: transform;

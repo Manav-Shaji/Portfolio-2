@@ -28,19 +28,23 @@ describe('Contact', () => {
     const card = within(screen.getByRole('article', { name: 'Contact details' }));
     expect(screen.getByRole('heading', { name: 'Contact' })).toBeInTheDocument();
     expect(card.getByText('Open to full-time roles · 2026')).toBeInTheDocument();
-    expect(card.getByRole('link', { name: 'manav.shaji.m@gmail.com' })).toHaveAttribute(
+    expect(card.getByRole('link', { name: site.email })).toHaveAttribute(
       'href',
-      'mailto:manav.shaji.m@gmail.com',
+      `mailto:${site.email}`,
     );
     expect(card.getByRole('button', { name: 'Copy email address' })).toBeInTheDocument();
     expect(card.getByRole('timer', { name: 'Local time in Kerala' })).toHaveTextContent(
       /^(?:--:--|(?:1[0-2]|[1-9]):[0-5]\d [AP]M) IST$/,
     );
-    expect(card.getByText('Usually within 24 hours')).toBeInTheDocument();
-    const resumeLink = card.getByRole('link', { name: 'Download resume' });
-    expect(site.resumeUrl).toBe('/resume.pdf');
-    expect(resumeLink).toHaveAttribute('href', site.resumeUrl);
-    expect(resumeLink).toHaveAttribute('download');
+    expect(card.getByText('Usually within a few days')).toBeInTheDocument();
+    expect(site.resumeUrl).toBeNull();
+    if (site.resumeUrl !== null) {
+      const resumeLink = card.getByRole('link', { name: 'Download resume' });
+      expect(resumeLink).toHaveAttribute('href', site.resumeUrl);
+      expect(resumeLink).toHaveAttribute('download');
+    } else {
+      expect(card.queryByRole('link', { name: 'Download resume' })).not.toBeInTheDocument();
+    }
   });
 
   it('copies the contact email and confirms success with a toast', async () => {
@@ -56,7 +60,7 @@ describe('Contact', () => {
       fireEvent.click(screen.getByRole('button', { name: 'Copy email address' }));
 
       await waitFor(() => {
-        expect(clipboard.writeText).toHaveBeenCalledWith('manav.shaji.m@gmail.com');
+        expect(clipboard.writeText).toHaveBeenCalledWith(site.email);
         expect(toast.success).toHaveBeenCalledWith('Email copied');
       });
     } finally {
@@ -92,13 +96,49 @@ describe('Contact', () => {
             name: 'Manav Shaji',
             email: 'manav@example.com',
             message: 'I would like to discuss a role.',
-            website: '',
+            company_url: '',
           }),
         }),
       );
       expect(toast.success).toHaveBeenCalledWith(
         'Message sent — I will get back to you soon.',
       );
+    });
+  });
+
+  it('associates validation errors with fields and exposes their limits', async () => {
+    render(<ContactForm />);
+
+    const name = screen.getByLabelText('Name');
+    const email = screen.getByLabelText('Email');
+    const message = screen.getByLabelText('Message');
+
+    expect(name).toHaveAttribute('maxLength', '100');
+    expect(email).toHaveAttribute('maxLength', '254');
+    expect(message).toHaveAttribute('maxLength', '5000');
+    expect(name).toHaveAttribute('autoComplete', 'name');
+    expect(email).toHaveAttribute('autoComplete', 'email');
+    expect(name).toHaveAttribute('aria-required', 'true');
+    expect(email).toHaveAttribute('aria-required', 'true');
+    expect(message).toHaveAttribute('aria-required', 'true');
+    expect(name).not.toHaveAttribute('aria-describedby');
+    expect(email).not.toHaveAttribute('aria-describedby');
+    expect(message).not.toHaveAttribute('aria-describedby');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Send message' }));
+
+    await waitFor(() => {
+      expect(name).toHaveAttribute('aria-invalid', 'true');
+      expect(name).toHaveAttribute('aria-describedby', 'name-error');
+      expect(screen.getByText('Please enter your name.')).toHaveAttribute('id', 'name-error');
+      expect(email).toHaveAttribute('aria-invalid', 'true');
+      expect(email).toHaveAttribute('aria-describedby', 'email-error');
+      expect(screen.getByText('Please enter a valid email.')).toHaveAttribute('id', 'email-error');
+      expect(message).toHaveAttribute('aria-invalid', 'true');
+      expect(message).toHaveAttribute('aria-describedby', 'message-error');
+      expect(
+        screen.getByText('Tell me a bit more about your project or role.'),
+      ).toHaveAttribute('id', 'message-error');
     });
   });
 

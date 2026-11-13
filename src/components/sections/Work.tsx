@@ -10,9 +10,6 @@ export function Work() {
           aria-label="Work"
           className="section-title text-3xl font-semibold tracking-[-0.04em] text-[var(--text)]"
         >
-          <span className="sr-only" aria-hidden="true">
-            02 — Work
-          </span>
           <Reveal variant="mask" as="span" underline>
             <span className="section-index" aria-hidden="true">
               02 —{' '}
@@ -27,7 +24,10 @@ export function Work() {
           <article
             key={project.name}
             data-project-card
-            className="premium-border premium-card project-card group overflow-hidden rounded-[28px] border border-[var(--border)] bg-[rgba(255,255,255,0.01)] transition-transform duration-200 hover:-translate-y-1"
+            data-has-link={project.href ? 'true' : 'false'}
+            className={`premium-border premium-card project-card overflow-hidden rounded-[28px] border border-[var(--border)] bg-[rgba(255,255,255,0.01)] ${
+              project.href ? 'group transition-transform duration-200 hover:-translate-y-1' : ''
+            }`}
           >
             <div className="grid gap-5 p-5 md:grid-cols-[0.7fr_1.3fr] md:p-7 lg:grid-cols-1">
               <div className="project-visual">
@@ -74,8 +74,21 @@ export function Work() {
                   </div>
                 </Reveal>
                 <div className="mt-4 flex items-center justify-between gap-2">
-                  <span className="text-xl font-semibold text-[var(--text)]">{project.name}</span>
-                  <ArrowUpRight className="h-4 w-4 text-[var(--accent-hover)] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  {project.href ? (
+                    <a
+                      href={project.href}
+                      className="text-xl font-semibold text-[var(--text)]"
+                    >
+                      {project.name}
+                    </a>
+                  ) : (
+                    <span className="text-xl font-semibold text-[var(--text)]">
+                      {project.name}
+                    </span>
+                  )}
+                  {project.href && (
+                    <ArrowUpRight className="h-4 w-4 text-[var(--accent-hover)] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  )}
                 </div>
                 <p className="mt-1 font-mono text-xs uppercase tracking-[0.14em] text-[var(--text-muted)]">
                   {project.type}
@@ -84,7 +97,9 @@ export function Work() {
 
               <div className="flex flex-col justify-between">
                 <div>
-                  <p className="text-sm font-medium text-[var(--text)]">Case study</p>
+                  {project.href && (
+                    <p className="text-sm font-medium text-[var(--text)]">Case study</p>
+                  )}
                   <p className="mt-3 max-w-2xl text-lg leading-8 text-[var(--text-muted)]">
                     {project.summary}
                   </p>

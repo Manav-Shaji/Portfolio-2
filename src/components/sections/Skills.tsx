@@ -2,6 +2,19 @@ import { BriefcaseBusiness, Code2, MapPin } from 'lucide-react';
 import { Reveal } from '@/components/effects/Reveal';
 import { skillGroups } from '@/data/skills';
 
+function getGroupIcon(icon: (typeof skillGroups)[number]['icon']) {
+  switch (icon) {
+    case 'code':
+      return <Code2 className="h-4 w-4" />;
+    case 'backend':
+      return <BriefcaseBusiness className="h-4 w-4" />;
+    case 'product':
+      return <MapPin className="h-4 w-4" />;
+    default:
+      return null;
+  }
+}
+
 export function Skills() {
   return (
     <section id="skills" className="py-[4.5rem] md:py-[5.25rem]">
@@ -27,13 +40,7 @@ export function Skills() {
           >
             <div className="mb-5 flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] bg-[rgba(255,255,255,0.02)] text-[var(--accent-hover)]">
-                {group.title === 'Frontend' ? (
-                  <Code2 className="h-4 w-4" />
-                ) : group.title === 'Backend' ? (
-                  <BriefcaseBusiness className="h-4 w-4" />
-                ) : (
-                  <MapPin className="h-4 w-4" />
-                )}
+                {getGroupIcon(group.icon)}
               </div>
               <h3 className="text-lg font-medium text-[var(--text)]">{group.title}</h3>
             </div>
