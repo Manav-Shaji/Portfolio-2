@@ -14,7 +14,6 @@ import {
   Code2,
   Download,
   ExternalLink,
-  GitBranch,
   Layers3,
   Mail,
   MapPin,
@@ -23,13 +22,20 @@ import {
   X,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { SocialLinks } from '../components/SocialLinks';
 import { cn } from '../lib/utils';
 
 const navItems = [
-  { id: 'work', label: 'Work' },
   { id: 'about', label: 'About' },
+  { id: 'work', label: 'Work' },
   { id: 'skills', label: 'Skills' },
   { id: 'contact', label: 'Contact' },
+];
+
+const introStats = [
+  ['MCA graduate', '2026'],
+  ['Focus', 'Full-Stack & Frontend'],
+  ['Based in', 'India'],
 ];
 
 const projectCards = [
@@ -39,7 +45,7 @@ const projectCards = [
     summary:
       'Built a responsive analytics platform for tracking budgets, subscriptions, and recurring expenses with role-based views and real-time summary insights.',
     stack: ['Next.js', 'TypeScript', 'Supabase', 'Tailwind'],
-    accent: 'bg-[#1f2a3a]',
+    accent: 'bg-[#20352e]',
   },
   {
     name: 'SignalBoard',
@@ -47,7 +53,7 @@ const projectCards = [
     summary:
       'Designed a lean operations dashboard for team workflows, task monitoring, and status aggregation that reduced context switching across workflows.',
     stack: ['React', 'Node.js', 'PostgreSQL', 'REST APIs'],
-    accent: 'bg-[#20273d]',
+    accent: 'bg-[#1d302d]',
   },
   {
     name: 'Orbit Studio',
@@ -55,7 +61,7 @@ const projectCards = [
     summary:
       'Crafted a high-converting brand presence with editorial storytelling, clear conversion paths, and fast, content-driven pages tuned for SEO.',
     stack: ['Next.js', 'Content model', 'Motion', 'SEO'],
-    accent: 'bg-[#1b2330]',
+    accent: 'bg-[#21302d]',
   },
 ];
 
@@ -187,7 +193,7 @@ export default function HomePage() {
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-[var(--bg)] text-[var(--text)]">
       <header className="sticky top-0 z-40 mx-auto w-full max-w-6xl px-4 pb-2 pt-4 md:px-6">
-        <div className="rounded-full border border-[var(--border)] bg-[rgba(11,13,18,0.75)] px-4 py-3 shadow-[0_12px_38px_rgba(0,0,0,0.18)] backdrop-blur-xl">
+        <div className="rounded-full border border-[var(--border)] bg-[rgba(5,5,5,0.78)] px-4 py-3 shadow-[0_12px_38px_rgba(0,0,0,0.28)] backdrop-blur-xl">
           <nav className="flex items-center justify-between gap-3">
             <button
               type="button"
@@ -195,7 +201,7 @@ export default function HomePage() {
               className="flex items-center gap-2 text-left"
               aria-label="Go to the home section"
             >
-              <span className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border)] bg-[rgba(255,255,255,0.02)] font-mono text-[0.7rem] font-medium text-[var(--accent-hover)]">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border)] bg-[rgba(255,255,255,0.02)] font-mono text-[0.75rem] font-medium text-[var(--accent-hover)]">
                 MS
               </span>
               <span className="text-sm font-medium tracking-[0.12em] text-[var(--text)] uppercase">Manav Shaji</span>
@@ -206,6 +212,7 @@ export default function HomePage() {
                 <button
                   key={item.id}
                   type="button"
+                  aria-current={activeSection === item.id ? 'location' : undefined}
                   onClick={() => scrollToSection(item.id)}
                   className={cn(
                     'relative text-sm text-[var(--text-muted)] transition-colors duration-200 hover:text-[var(--text)]',
@@ -224,14 +231,14 @@ export default function HomePage() {
               <button
                 type="button"
                 onClick={() => setCommandOpen(true)}
-                className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] px-3 py-1.5 text-xs font-medium text-[var(--text-muted)] transition-colors hover:border-[rgba(124,184,255,0.4)] hover:text-[var(--text)]"
+                className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] px-3 py-1.5 text-xs font-medium text-[var(--text-muted)] transition-colors hover:border-[var(--accent)] hover:text-[var(--text)]"
               >
-                <span className="font-mono text-[0.68rem]">⌘K</span>
+                <span className="font-mono text-[0.75rem]">⌘K</span>
                 Quick nav
               </button>
               <a
                 href="#contact"
-                className="inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-4 py-2 text-sm font-medium text-[#08111d] transition-colors hover:bg-[var(--accent-hover)]"
+                className="inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-4 py-2 text-sm font-medium text-[#050505] transition-colors hover:bg-[var(--accent-hover)]"
               >
                 Resume
                 <Download className="h-4 w-4" />
@@ -255,10 +262,11 @@ export default function HomePage() {
                 <button
                   key={item.id}
                   type="button"
+                  aria-current={activeSection === item.id ? 'location' : undefined}
                   onClick={() => scrollToSection(item.id)}
                   className={cn(
                     'rounded-full px-3 py-2 text-left text-sm text-[var(--text-muted)] transition-colors hover:bg-[rgba(255,255,255,0.02)] hover:text-[var(--text)]',
-                    activeSection === item.id && 'bg-[rgba(76,159,255,0.08)] text-[var(--text)]',
+                    activeSection === item.id && 'bg-[rgba(126,240,192,0.08)] text-[var(--text)]',
                   )}
                 >
                   {item.label}
@@ -266,7 +274,7 @@ export default function HomePage() {
               ))}
               <a
                 href="#contact"
-                className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-[var(--accent)] px-4 py-2 text-sm font-medium text-[#08111d]"
+                className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-[var(--accent)] px-4 py-2 text-sm font-medium text-[#050505]"
               >
                 Resume
                 <Download className="h-4 w-4" />
@@ -277,64 +285,86 @@ export default function HomePage() {
       </header>
 
       <main id="home" className="mx-auto max-w-6xl px-4 pb-20 md:px-6">
-        <section ref={heroRef} className="relative py-20 md:py-28">
+        <section ref={heroRef} className="relative py-[3.75rem] md:py-[5.25rem]">
           <div className="absolute inset-0 -z-10 opacity-90">
-            <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-[rgba(76,159,255,0.12)] blur-3xl" />
+            <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-[rgba(126,240,192,0.1)] blur-3xl" />
             <div className="absolute right-10 top-16 h-64 w-64 rounded-full bg-[rgba(255,255,255,0.04)] blur-3xl" />
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
-            className="max-w-4xl"
-          >
-            <p className="hero-meta section-tag mb-6 flex items-center gap-3 text-[var(--accent-hover)]">
-              <span className="inline-flex h-2.5 w-2.5 rounded-full bg-[var(--accent)]" />
-              Available for frontend & full-stack roles
-            </p>
+          <div className="grid gap-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(20rem,0.8fr)] lg:items-center">
+            <motion.div
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
+              className="max-w-4xl"
+            >
+              <p className="hero-meta section-tag mb-6 flex items-center gap-3 text-[var(--accent-hover)]">
+                <span className="inline-flex h-2.5 w-2.5 rounded-full bg-[var(--accent)]" />
+                Available for frontend & full-stack roles
+              </p>
 
-            <h1 className="max-w-4xl text-[clamp(2.7rem,6vw,5rem)] font-semibold tracking-[-0.06em] text-[var(--text)]">
-              <span className="hero-word block">I build thoughtful</span>
-              <span className="hero-word block text-[rgba(255,255,255,0.82)]">digital experiences</span>
-              <span className="hero-word block text-[var(--accent-hover)]">for people and products.</span>
-            </h1>
+              <h1 className="max-w-4xl text-[clamp(2.7rem,6vw,5rem)] font-semibold tracking-[-0.06em] text-[#ededed]">
+                <span className="hero-word block">I build thoughtful</span>
+                <span className="hero-word block">digital experiences</span>
+                <span className="hero-word block">for people and products.</span>
+                <span className="hero-word block text-[var(--accent)]">Reliable software.</span>
+              </h1>
 
-            <p className="hero-actions mt-6 max-w-2xl text-lg leading-8 text-[var(--text-muted)] md:text-xl">
-              I’m Manav Shaji, a 2026 MCA graduate focused on creating clean interfaces, scalable products, and reliable engineering systems.
-            </p>
+              <p className="hero-actions mt-6 max-w-2xl text-lg leading-8 text-[var(--text-muted)] md:text-xl">
+                I’m Manav Shaji, a 2026 MCA graduate focused on creating clean interfaces, scalable products, and reliable engineering systems.
+              </p>
 
-            <div className="hero-actions mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <button
-                type="button"
-                onClick={() => scrollToSection('work')}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--accent)] px-5 py-3 text-sm font-medium text-[#08111d] transition-colors hover:bg-[var(--accent-hover)]"
-              >
-                View projects
-                <ArrowUpRight className="h-4 w-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => scrollToSection('contact')}
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--border)] px-5 py-3 text-sm font-medium text-[var(--text)] transition-colors hover:border-[rgba(124,184,255,0.4)] hover:text-[var(--text)]"
-              >
-                Let’s talk
-                <Mail className="h-4 w-4" />
-              </button>
-            </div>
-          </motion.div>
-
-          <div className="mt-16 grid gap-4 border-t border-[var(--border)] pt-8 md:grid-cols-3">
-            {[
-              ['MCA graduate', '2026'],
-              ['Focus', 'Full-Stack & Frontend'],
-              ['Based in', 'India'],
-            ].map(([label, value]) => (
-              <div key={label} className="rounded-2xl border border-[var(--border)] bg-[rgba(255,255,255,0.01)] p-4">
-                <p className="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-[var(--text-muted)]">{label}</p>
-                <p className="mt-2 text-lg font-medium text-[var(--text)]">{value}</p>
+              <div className="hero-actions mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
+                <button
+                  type="button"
+                  onClick={() => scrollToSection('work')}
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--accent)] px-5 py-3 text-sm font-medium text-[#050505] transition-colors hover:bg-[var(--accent-hover)]"
+                >
+                  View projects
+                  <ArrowUpRight className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => scrollToSection('contact')}
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--border)] px-5 py-3 text-sm font-medium text-[var(--text)] transition-colors hover:border-[var(--accent)] hover:text-[var(--text)]"
+                >
+                  Let’s talk
+                  <Mail className="h-4 w-4" />
+                </button>
               </div>
-            ))}
+
+              <div className="hero-actions mt-8 flex flex-wrap items-center gap-4">
+                <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--text-muted)]">
+                  Find me on
+                </span>
+                <SocialLinks size="md" />
+              </div>
+            </motion.div>
+
+            <div
+              aria-hidden="true"
+              className="hero-terminal hidden min-h-[280px] w-full max-w-md justify-self-end rounded-3xl border border-[rgba(126,240,192,0.22)] bg-[#0b100e] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.35)] lg:block"
+            >
+              <div className="flex items-center justify-between border-b border-[var(--border)] pb-4">
+                <div className="flex items-center gap-2">
+                  <span className="h-2.5 w-2.5 rounded-full bg-[#ff6b6b]" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-[#f7c66a]" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-[var(--accent)]" />
+                </div>
+                <span className="font-mono text-xs text-[var(--text-muted)]">interface.tsx</span>
+              </div>
+              <div className="mt-6 space-y-3 font-mono text-[13px] leading-6">
+                <p><span className="text-[#d29eff]">const</span> interface = {'{'}</p>
+                <p className="pl-5"><span className="text-[#9bd9ff]">responsive</span>: <span className="text-[var(--accent)]">true</span>,</p>
+                <p className="pl-5"><span className="text-[#9bd9ff]">accessible</span>: <span className="text-[var(--accent)]">true</span>,</p>
+                <p className="pl-5"><span className="text-[#9bd9ff]">builtWithCare</span>: <span className="text-[var(--accent)]">true</span></p>
+                <p>{'}'}</p>
+                <p className="pt-2 text-[var(--text-muted)]">
+                  <span className="text-[var(--accent)]">build</span>(interface);
+                  <span className="terminal-cursor ml-1 inline-block h-4 w-2 translate-y-0.5 bg-[var(--accent)]" />
+                </p>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -344,10 +374,11 @@ export default function HomePage() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="py-24 md:py-28"
+          className="py-[4.5rem] md:py-[5.25rem]"
         >
-          <div className="mb-8 flex items-center gap-3">
-            <span className="section-tag">01 — About</span>
+          <div className="mb-8 flex flex-col items-start gap-2">
+            <span className="section-tag">01</span>
+            <h2 className="text-3xl font-semibold tracking-[-0.04em] text-[var(--text)]">About</h2>
           </div>
           <div className="grid gap-10 md:grid-cols-[1.1fr_0.9fr]">
             <div>
@@ -363,7 +394,7 @@ export default function HomePage() {
 
             <div className="rounded-3xl border border-[var(--border)] bg-[rgba(255,255,255,0.02)] p-5">
               <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[rgba(76,159,255,0.12)] text-[var(--accent-hover)]">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[rgba(126,240,192,0.1)] text-[var(--accent-hover)]">
                   <Sparkles className="h-5 w-5" />
                 </div>
                 <div>
@@ -387,6 +418,15 @@ export default function HomePage() {
               </ul>
             </div>
           </div>
+
+          <div className="mt-8 grid gap-4 border-t border-[var(--border)] pt-6 sm:grid-cols-3">
+            {introStats.map(([label, value]) => (
+              <div key={label} className="rounded-2xl border border-[var(--border)] bg-[rgba(255,255,255,0.02)] p-4">
+                <p className="font-mono text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">{label}</p>
+                <p className="mt-2 text-lg font-medium text-[var(--text)]">{value}</p>
+              </div>
+            ))}
+          </div>
         </motion.section>
 
         <motion.section
@@ -395,10 +435,10 @@ export default function HomePage() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.15 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="py-24 md:py-28"
+          className="py-[4.5rem] md:py-[5.25rem]"
         >
           <div className="mb-10 flex items-center justify-between gap-4">
-            <span className="section-tag">02 — Selected work</span>
+            <span className="section-tag">02 — Work</span>
           </div>
 
           <div className="grid gap-5">
@@ -408,11 +448,11 @@ export default function HomePage() {
                 className="group overflow-hidden rounded-[28px] border border-[var(--border)] bg-[rgba(255,255,255,0.01)] transition-transform duration-200 hover:-translate-y-1"
               >
                 <div className="grid gap-5 p-5 md:grid-cols-[0.7fr_1.3fr] md:p-7">
-                  <div className={cn('rounded-[20px] border border-[var(--border)] p-4', project.accent)}>
+                  <div className={cn('rounded-[20px] border border-[rgba(126,240,192,0.2)] p-4 transition-[border-color,box-shadow] duration-200 group-hover:border-[var(--accent)] group-hover:shadow-[0_0_26px_rgba(126,240,192,0.16)]', project.accent)}>
                     <div className="flex h-full min-h-[150px] flex-col justify-between">
                       <div className="flex items-center justify-between text-[var(--text-muted)]">
                         <Layers3 className="h-4 w-4" />
-                        <span className="font-mono text-[0.68rem] uppercase tracking-[0.14em]">{project.type}</span>
+                        <span className="font-mono text-xs uppercase tracking-[0.14em]">{project.type}</span>
                       </div>
                       <div className="mt-6 flex items-center justify-between gap-2">
                         <span className="text-xl font-semibold text-[var(--text)]">{project.name}</span>
@@ -423,7 +463,7 @@ export default function HomePage() {
 
                   <div className="flex flex-col justify-between">
                     <div>
-                      <p className="text-sm uppercase tracking-[0.18em] text-[var(--text-muted)]">Case study</p>
+                      <p className="text-sm font-medium text-[var(--text)]">Case study</p>
                       <p className="mt-3 max-w-2xl text-lg leading-8 text-[var(--text-muted)]">{project.summary}</p>
                     </div>
                     <div className="mt-6 flex flex-wrap gap-2">
@@ -446,7 +486,7 @@ export default function HomePage() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.15 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="py-24 md:py-28"
+          className="py-[4.5rem] md:py-[5.25rem]"
         >
           <div className="mb-8 flex items-center gap-3">
             <span className="section-tag">03 — Skills</span>
@@ -486,7 +526,7 @@ export default function HomePage() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.15 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="py-24 md:py-28"
+          className="py-[4.5rem] md:py-[5.25rem]"
         >
           <div className="mb-8 flex items-center gap-3">
             <span className="section-tag">04 — Contact</span>
@@ -499,19 +539,8 @@ export default function HomePage() {
                 I’m currently open to entry-level full-stack and front-end opportunities where strong product thinking, UX clarity, and clean engineering matter.
               </p>
 
-              <div className="mt-6 space-y-4 text-sm text-[var(--text-muted)]">
-                <a href="mailto:manavshaji.dev@gmail.com" className="flex items-center gap-3 rounded-full border border-[var(--border)] px-3 py-2 transition-colors hover:border-[rgba(124,184,255,0.4)] hover:text-[var(--text)]">
-                  <Mail className="h-4 w-4 text-[var(--accent-hover)]" />
-                  manavshaji.dev@gmail.com
-                </a>
-                <a href="https://github.com/Manav-Shaji" target="_blank" rel="noreferrer" className="flex items-center gap-3 rounded-full border border-[var(--border)] px-3 py-2 transition-colors hover:border-[rgba(124,184,255,0.4)] hover:text-[var(--text)]">
-                  <GitBranch className="h-4 w-4 text-[var(--accent-hover)]" />
-                  github.com/Manav-Shaji
-                </a>
-                <a href="https://www.linkedin.com" target="_blank" rel="noreferrer" className="flex items-center gap-3 rounded-full border border-[var(--border)] px-3 py-2 transition-colors hover:border-[rgba(124,184,255,0.4)] hover:text-[var(--text)]">
-                  <BriefcaseBusiness className="h-4 w-4 text-[var(--accent-hover)]" />
-                  LinkedIn
-                </a>
+              <div className="mt-6">
+                <SocialLinks size="md" />
               </div>
             </div>
 
@@ -527,7 +556,7 @@ export default function HomePage() {
                   <input
                     id="name"
                     {...form.register('name')}
-                    className="w-full rounded-2xl border border-[var(--border)] bg-[rgba(11,13,18,0.6)] px-4 py-3 text-[var(--text)] outline-none transition-colors placeholder:text-[var(--text-muted)] focus:border-[rgba(124,184,255,0.7)]"
+                    className="w-full rounded-2xl border border-[var(--border)] bg-[rgba(5,5,5,0.72)] px-4 py-3 text-[var(--text)] outline-none transition-colors placeholder:text-[var(--text-muted)] focus:border-[var(--accent)]"
                     placeholder="Your name"
                   />
                   {form.formState.errors.name && (
@@ -543,7 +572,7 @@ export default function HomePage() {
                     id="email"
                     type="email"
                     {...form.register('email')}
-                    className="w-full rounded-2xl border border-[var(--border)] bg-[rgba(11,13,18,0.6)] px-4 py-3 text-[var(--text)] outline-none transition-colors placeholder:text-[var(--text-muted)] focus:border-[rgba(124,184,255,0.7)]"
+                    className="w-full rounded-2xl border border-[var(--border)] bg-[rgba(5,5,5,0.72)] px-4 py-3 text-[var(--text)] outline-none transition-colors placeholder:text-[var(--text-muted)] focus:border-[var(--accent)]"
                     placeholder="your@email.com"
                   />
                   {form.formState.errors.email && (
@@ -560,7 +589,7 @@ export default function HomePage() {
                   id="message"
                   rows={5}
                   {...form.register('message')}
-                  className="w-full rounded-2xl border border-[var(--border)] bg-[rgba(11,13,18,0.6)] px-4 py-3 text-[var(--text)] outline-none transition-colors placeholder:text-[var(--text-muted)] focus:border-[rgba(124,184,255,0.7)]"
+                  className="w-full rounded-2xl border border-[var(--border)] bg-[rgba(5,5,5,0.72)] px-4 py-3 text-[var(--text)] outline-none transition-colors placeholder:text-[var(--text-muted)] focus:border-[var(--accent)]"
                   placeholder="Tell me about the role, product, or problem you’re solving."
                 />
                 {form.formState.errors.message && (
@@ -571,7 +600,7 @@ export default function HomePage() {
               <button
                 type="submit"
                 disabled={form.formState.isSubmitting}
-                className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-[var(--accent)] px-5 py-3 text-sm font-medium text-[#08111d] transition-colors hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-70"
+                className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-[var(--accent)] px-5 py-3 text-sm font-medium text-[#050505] transition-colors hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-70"
               >
                 {form.formState.isSubmitting ? 'Sending...' : 'Send inquiry'}
                 <ExternalLink className="h-4 w-4" />
@@ -581,9 +610,14 @@ export default function HomePage() {
         </motion.section>
       </main>
 
+      <footer className="mx-auto flex max-w-6xl items-center justify-between gap-4 border-t border-[var(--border)] px-4 py-8 md:px-6">
+        <p className="font-mono text-xs text-[var(--text-muted)]">Manav Shaji</p>
+        <SocialLinks size="sm" />
+      </footer>
+
       <Command.Dialog open={commandOpen} onOpenChange={setCommandOpen} label="Portfolio quick navigation">
         <div className="fixed inset-0 z-50 bg-[rgba(5,7,12,0.7)] backdrop-blur-sm" />
-        <div className="fixed left-1/2 top-1/2 z-50 w-[min(92vw,640px)] -translate-x-1/2 -translate-y-1/2 rounded-[26px] border border-[var(--border)] bg-[#11161f] p-3 shadow-[0_30px_80px_rgba(0,0,0,0.45)]">
+        <div className="fixed left-1/2 top-1/2 z-50 w-[min(92vw,640px)] -translate-x-1/2 -translate-y-1/2 rounded-[26px] border border-[var(--border)] bg-[#111412] p-3 shadow-[0_30px_80px_rgba(0,0,0,0.45)]">
           <Command value="" onValueChange={(value) => { const match = quickActions.find((item) => item.label === value); if (match) scrollToSection(match.target); }} className="w-full">
             <Command.Input
               placeholder="Search sections..."
