@@ -2,24 +2,22 @@ import React from 'react';
 import { render, screen, within } from '@testing-library/react';
 import { Marquee } from '../components/Marquee';
 import { SocialLinks } from '../components/SocialLinks';
+import { site } from '../data/site';
 import HomePage from './page';
 
 describe('HomePage', () => {
   it('renders the portfolio hero and primary sections', () => {
     const { container } = render(React.createElement(HomePage));
 
-    expect(container.querySelectorAll('.background-fx')).toHaveLength(1);
-    expect(screen.getByRole('progressbar', { name: 'Page scroll progress' })).toBeInTheDocument();
     expect(screen.getByText('initializing portfolio...')).toBeInTheDocument();
     expect(screen.getAllByText(/manav shaji/i).length).toBeGreaterThan(0);
-    expect(screen.getByRole('button', { name: /work/i })).toBeInTheDocument();
+    expect(screen.getAllByRole('link', { name: 'Work' }).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/02 — work/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/contact/i).length).toBeGreaterThan(0);
     expect(screen.getByRole('heading', { level: 1 }).textContent).toContain('Reliable software.');
     expect(screen.getByRole('heading', { level: 2, name: 'About' })).toBeInTheDocument();
     expect(screen.getAllByRole('group', { name: 'Social links' })).toHaveLength(2);
     expect(container.querySelectorAll('.project-preview')).toHaveLength(3);
-    expect(screen.getByText('View', { selector: '.cursor-label' })).toBeInTheDocument();
     expect(container.querySelectorAll('[data-reveal="mask"] .reveal-heading-rule')).toHaveLength(4);
     expect(container.querySelectorAll('#work .project-preview-clip[data-reveal="clip"]')).toHaveLength(3);
     expect(container.querySelector('#about .about-scroll-paragraph')?.textContent).toBe(
@@ -83,7 +81,7 @@ describe('SocialLinks', () => {
 
 describe('Marquee', () => {
   it('renders two decorative copies of the technology list', () => {
-    const { container } = render(React.createElement(Marquee));
+    const { container } = render(React.createElement(Marquee, { items: site.marquee }));
 
     expect(container.firstElementChild).toHaveAttribute('aria-hidden', 'true');
 

@@ -1,13 +1,6 @@
 'use client';
 
-import {
-  useCallback,
-  useRef,
-  type ReactNode,
-} from 'react';
-import { useGSAP } from '@gsap/react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useCallback, useEffect, useRef, type ReactNode } from 'react';
 
 export type RevealVariant = 'fade-up' | 'stagger' | 'mask' | 'clip';
 
@@ -68,9 +61,9 @@ function refreshAfterFontsLoad() {
 
   fontRefreshScheduled = true;
   if (document.fonts?.ready) {
-    document.fonts.ready.then(() => ScrollTrigger.refresh());
-  } else {
-    ScrollTrigger.refresh();
+    void document.fonts.ready.then(() =>
+      import('gsap/ScrollTrigger').then(({ ScrollTrigger }) => ScrollTrigger.refresh()),
+    );
   }
 }
 
@@ -92,93 +85,121 @@ export function Reveal({
     rootRef.current = element;
   }, []);
 
-  useGSAP(
-    () => {
-      const root = rootRef.current;
-      const hasMatchMedia = typeof window.matchMedia === 'function';
-      const reducedMotion = hasMatchMedia
-        ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
-        : true;
+  useEffect(() => {
+    const root = rootRef.current;
+    const hasMatchMedia = typeof window.matchMedia === 'function';
+    const reducedMotion = hasMatchMedia
+      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      : true;
 
-      if (!root || reducedMotion || !hasMatchMedia) {
-        return;
-      }
+    if (!root || reducedMotion || !hasMatchMedia) return;
 
-      gsap.registerPlugin(ScrollTrigger);
-      const scrollTrigger = {
-        trigger: root,
-        start: 'top 85%',
-        once: true,
-      };
+    let cancelled = false;
+    let revertAnimation: (() => void) | undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        observer.disconnect();
 
-      if (variant === 'fade-up') {
-        gsap.fromTo(
-          root,
-          { opacity: 0, y: 32 },
-          { opacity: 1, y: 0, duration, ease: revealEase, scrollTrigger },
+        void Promise.all([import('gsap'), import('gsap/ScrollTrigger')]).then(
+          ([gsapModule, scrollTriggerModule]) => {
+            if (cancelled) return;
+            const gsap = gsapModule.default;
+            const { ScrollTrigger } = scrollTriggerModule;
+            gsap.registerPlugin(ScrollTrigger);
+            const scrollTrigger = {
+              trigger: root,
+              start: 'top 85%',
+              once: true,
+            };
+
+            const context = gsap.context(() => {
+              if (variant === 'fade-up') {
+                gsap.fromTo(
+                  root,
+                  { opacity: 0, y: 32 },
+                  { opacity: 1, y: 0, duration, ease: revealEase, scrollTrigger },
+                );
+              } else if (variant === 'stagger') {
+                const targets = Array.from(root.children);
+                if (targets.length > 0) {
+                  gsap.fromTo(
+                    targets,
+                    { opacity: 0, y: 32 },
+                    {
+                      opacity: 1,
+                      y: 0,
+                      duration,
+                      ease: revealEase,
+                      stagger: staggerDelay,
+                      scrollTrigger,
+                    },
+                  );
+                }
+              } else if (variant === 'mask') {
+                const timeline = gsap.timeline({ scrollTrigger });
+                if (maskContentRef.current) {
+                  timeline.fromTo(
+                    maskContentRef.current,
+                    { yPercent: 110 },
+                    { yPercent: 0, duration, ease: revealEase },
+                  );
+                }
+                if (underline && underlineRef.current) {
+                  timeline.fromTo(
+                    underlineRef.current,
+                    { scaleX: 0 },
+                    { scaleX: 1, duration, ease: revealEase },
+                    0,
+                  );
+                }
+              } else {
+                gsap.fromTo(
+                  root,
+                  { clipPath: 'inset(0 0 100% 0)' },
+                  {
+                    clipPath: 'inset(0 0 0% 0)',
+                    duration,
+                    ease: revealEase,
+                    scrollTrigger,
+                  },
+                );
+
+                if (parallax && parallaxContentRef.current) {
+                  gsap.fromTo(
+                    parallaxContentRef.current,
+                    { y: -20 },
+                    {
+                      y: 20,
+                      ease: 'none',
+                      scrollTrigger: {
+                        trigger: root,
+                        start: 'top bottom',
+                        end: 'bottom top',
+                        scrub: true,
+                      },
+                    },
+                  );
+                }
+              }
+            }, root);
+
+            revertAnimation = () => context.revert();
+            refreshAfterFontsLoad();
+            ScrollTrigger.refresh();
+          },
         );
-      } else if (variant === 'stagger') {
-        const targets = Array.from(root.children);
-        if (targets.length > 0) {
-          gsap.fromTo(
-            targets,
-            { opacity: 0, y: 32 },
-            {
-              opacity: 1,
-              y: 0,
-              duration,
-              ease: revealEase,
-              stagger: staggerDelay,
-              scrollTrigger,
-            },
-          );
-        }
-      } else if (variant === 'mask') {
-        const timeline = gsap.timeline({ scrollTrigger });
-        if (maskContentRef.current) {
-          timeline.fromTo(
-            maskContentRef.current,
-            { yPercent: 110 },
-            { yPercent: 0, duration, ease: revealEase },
-          );
-        }
-        if (underline && underlineRef.current) {
-          timeline.fromTo(
-            underlineRef.current,
-            { scaleX: 0 },
-            { scaleX: 1, duration, ease: revealEase },
-            0,
-          );
-        }
-      } else {
-        gsap.fromTo(
-          root,
-          { clipPath: 'inset(0 0 100% 0)' },
-          { clipPath: 'inset(0 0 0% 0)', duration, ease: revealEase, scrollTrigger },
-        );
+      },
+      { threshold: 0.15 },
+    );
 
-        if (parallax && parallaxContentRef.current) {
-          gsap.fromTo(
-            parallaxContentRef.current,
-            { y: -20 },
-            {
-              y: 20,
-              ease: 'none',
-              scrollTrigger: {
-                trigger: root,
-                start: 'top bottom',
-                end: 'bottom top',
-                scrub: true,
-              },
-            },
-          );
-        }
-      }
-
-      refreshAfterFontsLoad();
-    },
-    { scope: rootRef },
-  );
+    observer.observe(root);
+    return () => {
+      cancelled = true;
+      observer.disconnect();
+      revertAnimation?.();
+    };
+  }, [parallax, staggerDelay, underline, variant]);
 
   const content =
     variant === 'mask' ? (

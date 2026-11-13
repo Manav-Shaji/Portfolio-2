@@ -5,11 +5,13 @@ import './globals.css';
 
 const inter = Inter({
   subsets: ['latin'],
+  display: 'swap',
   variable: '--font-sans',
 });
 
 const geistMono = Geist_Mono({
   subsets: ['latin'],
+  display: 'swap',
   variable: '--font-mono',
 });
 
@@ -17,6 +19,7 @@ const instrumentSerif = Instrument_Serif({
   subsets: ['latin'],
   weight: '400',
   style: ['italic'],
+  display: 'swap',
   variable: '--font-serif',
 });
 

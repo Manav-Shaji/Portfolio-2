@@ -1,12 +1,35 @@
-import { site } from '../data/site';
+'use client';
 
-const marqueeItems = [...site.marquee, ...site.marquee];
+import { useEffect, useRef } from 'react';
 
-export function Marquee() {
+type Props = {
+  items: readonly string[];
+};
+
+export function Marquee({ items }: Props) {
+  const marqueeRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const marquee = marqueeRef.current;
+    if (!marquee) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      marquee.dataset.visible = String(entry?.isIntersecting ?? false);
+    });
+    observer.observe(marquee);
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="tech-marquee" aria-hidden="true">
+    <div
+      ref={marqueeRef}
+      className="tech-marquee"
+      aria-hidden="true"
+      data-visible="false"
+    >
       <div className="tech-marquee-track">
-        {marqueeItems.map((technology, index) => (
+        {[...items, ...items].map((technology, index) => (
           <span className="tech-marquee-item" key={`${technology}-${index}`}>
             {technology}
           </span>
