@@ -7,6 +7,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { AboutParagraph } from '../components/AboutParagraph';
+import { ContactInfoCard } from '../components/ContactInfoCard';
 import { DeferredContactForm } from '../components/DeferredContactForm';
 import { EffectsLayer } from '../components/EffectsLayer';
 import { FooterReveal } from '../components/FooterReveal';
@@ -306,13 +307,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
-            <div className="premium-border premium-card rounded-[28px] border border-[var(--border)] bg-[rgba(255,255,255,0.02)] p-6">
-              <p className="text-2xl font-semibold text-[var(--text)]">Let’s build something thoughtful.</p>
-              <p className="mt-4 text-base leading-7 text-[var(--text-muted)]">
-                I’m currently open to entry-level full-stack and front-end opportunities where strong product thinking, UX clarity, and clean engineering matter.
-              </p>
-            </div>
-
+            <ContactInfoCard />
             <DeferredContactForm />
           </div>
         </section>

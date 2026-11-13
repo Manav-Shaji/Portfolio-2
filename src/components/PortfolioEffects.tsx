@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import Lenis from 'lenis';
 
 export function PortfolioEffects() {
   const progressRef = useRef<HTMLDivElement>(null);
@@ -12,7 +13,7 @@ export function PortfolioEffects() {
       window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
     let progressFrame: number | null = null;
     let cancelled = false;
-    let lenis: import('lenis').default | null = null;
+    let lenis: Lenis | null = null;
     let gsap: typeof import('gsap').default | null = null;
     let scrollTrigger: typeof import('gsap/ScrollTrigger').ScrollTrigger | null = null;
     let nativeScrollActive = true;
@@ -46,13 +47,12 @@ export function PortfolioEffects() {
       void Promise.all([
         import('gsap'),
         import('gsap/ScrollTrigger'),
-        import('lenis'),
-      ]).then(([gsapModule, scrollTriggerModule, lenisModule]) => {
+      ]).then(([gsapModule, scrollTriggerModule]) => {
         if (cancelled) return;
         gsap = gsapModule.default;
         scrollTrigger = scrollTriggerModule.ScrollTrigger;
         gsap.registerPlugin(scrollTrigger);
-        lenis = new lenisModule.default({ autoRaf: false });
+        lenis = new Lenis({ autoRaf: false });
         lenis.on('scroll', onLenisScroll);
         gsap.ticker.lagSmoothing(0);
         gsap.ticker.add(raf);

@@ -1,5 +1,5 @@
 import type { UseFormRegisterReturn } from 'react-hook-form';
-import { ExternalLink } from 'lucide-react';
+import { Send } from 'lucide-react';
 
 type Props = {
   nameRegistration?: UseFormRegisterReturn;
@@ -74,8 +74,8 @@ export function ContactFormFields({
         disabled={isSubmitting}
         className="mint-cta premium-border mt-1 inline-flex items-center justify-center gap-2 rounded-full bg-[var(--accent)] px-5 py-3 text-sm text-[#050505] transition-colors hover:bg-[var(--accent-hover)] hover:brightness-110 hover:shadow-[0_0_20px_rgba(126,240,192,0.2)] disabled:cursor-not-allowed disabled:opacity-70 md:col-span-2 md:justify-self-start"
       >
-        {isSubmitting ? 'Sending...' : 'Send inquiry'}
-        <ExternalLink className="h-4 w-4" />
+        {isSubmitting ? 'Sending...' : 'Send message'}
+        <Send className="h-4 w-4" />
       </button>
     </>
   );
