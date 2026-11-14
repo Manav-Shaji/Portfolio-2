@@ -104,7 +104,39 @@ describe('Contact', () => {
       expect(toast.success).toHaveBeenCalledWith(
         'Message sent — I will get back to you soon.',
       );
+      expect(form.getByLabelText('Name')).toHaveValue('');
+      expect(form.getByLabelText('Email')).toHaveValue('');
+      expect(form.getByLabelText('Message')).toHaveValue('');
     });
+  });
+
+  it('shows a failure message and keeps entered values when delivery fails', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(JSON.stringify({ error: 'Could not send your message. Please try again.' }), {
+          status: 502,
+        }),
+      ),
+    );
+    render(<ContactForm />);
+    const form = within(screen.getByRole('button', { name: 'Send message' }).closest('form')!);
+
+    fireEvent.change(form.getByLabelText('Name'), { target: { value: 'Manav Shaji' } });
+    fireEvent.change(form.getByLabelText('Email'), { target: { value: 'manav@example.com' } });
+    fireEvent.change(form.getByLabelText('Message'), {
+      target: { value: 'I would like to discuss a role.' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Send message' }));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        'Could not send your message. Please try again.',
+      );
+    });
+    expect(form.getByLabelText('Name')).toHaveValue('Manav Shaji');
+    expect(form.getByLabelText('Email')).toHaveValue('manav@example.com');
+    expect(form.getByLabelText('Message')).toHaveValue('I would like to discuss a role.');
   });
 
   it('associates validation errors with fields and exposes their limits', async () => {
@@ -209,7 +241,8 @@ describe('Contact', () => {
     const responsePromise = new Promise<Response>((resolve) => {
       resolveResponse = resolve;
     });
-    vi.stubGlobal('fetch', vi.fn(() => responsePromise));
+    const fetch = vi.fn(() => responsePromise);
+    vi.stubGlobal('fetch', fetch);
     render(<ContactForm />);
     const form = within(screen.getByRole('button', { name: 'Send message' }).closest('form')!);
 
@@ -220,7 +253,10 @@ describe('Contact', () => {
     });
     fireEvent.click(screen.getByRole('button', { name: 'Send message' }));
 
-    expect(await screen.findByRole('button', { name: 'Sending...' })).toBeDisabled();
+    const pendingButton = await screen.findByRole('button', { name: 'Sending...' });
+    expect(pendingButton).toBeDisabled();
+    fireEvent.click(pendingButton);
+    expect(fetch).toHaveBeenCalledTimes(1);
     resolveResponse?.(new Response(JSON.stringify({ success: true }), { status: 200 }));
     await waitFor(() => expect(toast.success).toHaveBeenCalled());
   });

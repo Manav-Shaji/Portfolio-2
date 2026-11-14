@@ -40,7 +40,10 @@ export function ContactForm() {
       toast.success('Message sent — I will get back to you soon.');
       form.reset();
     } catch (error) {
-      console.error('Contact message submission failed.', error);
+      console.error(
+        'Contact message submission failed:',
+        error instanceof Error ? error.name : typeof error,
+      );
       toast.error('Could not send your message. Please try again.');
     }
   };

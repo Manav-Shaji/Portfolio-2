@@ -8,11 +8,10 @@ Use Node.js with npm, then install dependencies and start the development server
 
 ```bash
 npm install
-cp .env.example .env.local
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). The site can run without Resend credentials, but contact-form delivery remains unavailable until they are configured in `.env.local`.
+Configure `.env.local` before running the app if you want contact-form delivery. Open [http://localhost:3000](http://localhost:3000). The site can run without Gmail credentials, but contact-form delivery remains unavailable until they are configured.
 
 ## Scripts
 
@@ -25,16 +24,65 @@ Open [http://localhost:3000](http://localhost:3000). The site can run without Re
 | `npm test` | Run Vitest |
 | `npm run test:watch` | Run Vitest in watch mode |
 
+## Contact email setup
+
+The existing `/api/contact` route sends enquiries through Gmail SMTP using Nodemailer. Automated tests mock Nodemailer and never send email.
+
+### Create a Gmail App Password
+
+1. Enable 2-Step Verification on the Google Account for `manav.shaji.m@gmail.com`.
+2. Open **Google Account → Security → 2-Step Verification → App passwords** and create an app password.
+3. Use that app password only. Do not use your normal Gmail password or commit the app password.
+
+If App passwords are not available for the account, review Google's account or organization restrictions; do not substitute the normal account password.
+
+### Configure local development
+
+Create or update `.env.local` in the repository root with:
+
+```dotenv
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+GMAIL_USER=manav.shaji.m@gmail.com
+GMAIL_APP_PASSWORD=<YOUR_GMAIL_APP_PASSWORD>
+CONTACT_EMAIL=manav.shaji.m@gmail.com
+```
+
+`.env.local` is gitignored. Keep `GMAIL_APP_PASSWORD` server-side and never add a `NEXT_PUBLIC_` prefix to Gmail credentials. After editing the file, restart the Next.js development server, open [http://localhost:3000](http://localhost:3000), and submit a test enquiry. Confirm that it arrives at `manav.shaji.m@gmail.com`; then reply to the message and verify the reply is addressed to the visitor, whose address is set as `Reply-To`.
+
+The route validates input, enforces the hidden `company_url` honeypot and per-instance rate limit, limits request size, escapes HTML content, and uses SMTP connection/greeting/socket timeouts. Its errors do not reveal provider details or credentials.
+
+### Configure Vercel production variables
+
+In **Vercel → Portfolio-2 → Settings → Environment Variables**, add these values to the Production environment (and Preview/Development if needed):
+
+```dotenv
+NEXT_PUBLIC_SITE_URL=https://manavshaji.de5.net
+GMAIL_USER=manav.shaji.m@gmail.com
+GMAIL_APP_PASSWORD=<YOUR_GMAIL_APP_PASSWORD>
+CONTACT_EMAIL=manav.shaji.m@gmail.com
+```
+
+Save the variables and trigger a new deployment; changing environment variables does not update an already-built deployment. Do not paste the app password into source control, support messages, or client-side variables.
+
+### Troubleshooting
+
+- Check the Vercel function logs for the SMTP error code or timeout kind. The route does not log the message body, email addresses, or credentials.
+- Confirm `GMAIL_USER` is the account that generated the App Password, and that `GMAIL_APP_PASSWORD` is an App Password rather than the normal account password.
+- Confirm the App Password has no accidental truncation and the recipient is a valid address.
+- Check Gmail’s Sent folder, spam/junk, account security alerts, and Google Workspace/admin restrictions.
+- A `429` response means the per-instance rate limit was reached; wait for its window to pass. In-memory rate limiting is best-effort across multiple Vercel instances.
+- After changing Vercel variables, redeploy before retesting.
+
 ## Environment variables
 
 | Variable | Required | Description |
 | --- | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | No | Canonical site URL used for metadata (defaults to `http://localhost:3000`) |
-| `RESEND_API_KEY` | Yes, for delivery | Resend API key used by `/api/contact` |
-| `RESEND_FROM_EMAIL` | Yes, for delivery | Sender address on a domain verified with Resend |
-| `CONTACT_EMAIL` | Yes, for delivery | Inbox that receives portfolio messages |
+| `GMAIL_USER` | Yes, for delivery | Gmail SMTP account used as the From address; server-side only |
+| `GMAIL_APP_PASSWORD` | Yes, for delivery | Google App Password for SMTP authentication; never expose it to client code |
+| `CONTACT_EMAIL` | Yes, for delivery | Valid recipient inbox for portfolio messages |
 
-The contact route validates submissions, checks a honeypot field and sends messages through Resend. Without the three Resend/contact variables, it returns a service-unavailable response. Start from `.env.example`; do not commit `.env.local` or real credentials.
+`.env.local` is gitignored; do not commit it or real credentials.
 
 ## Project structure
 
