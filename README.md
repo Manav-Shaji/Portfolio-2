@@ -11,7 +11,7 @@ npm install
 npm run dev
 ```
 
-Configure `.env.local` before running the app if you want contact-form delivery. Open [http://localhost:3000](http://localhost:3000). The site can run without Gmail credentials, but contact-form delivery remains unavailable until they are configured.
+Configure `.env` before running the app if you want contact-form delivery. Open [http://localhost:3000](http://localhost:3000). The site can run without Gmail credentials, but contact-form delivery remains unavailable until they are configured.
 
 ## Scripts
 
@@ -30,7 +30,7 @@ The existing `/api/contact` route sends enquiries through Gmail SMTP using Nodem
 
 ### Create a Gmail App Password
 
-1. Enable 2-Step Verification on the Google Account for `manav.shaji.m@gmail.com`.
+1. Enable 2-Step Verification on the Google Account you intend to use for SMTP.
 2. Open **Google Account → Security → 2-Step Verification → App passwords** and create an app password.
 3. Use that app password only. Do not use your normal Gmail password or commit the app password.
 
@@ -38,16 +38,16 @@ If App passwords are not available for the account, review Google's account or o
 
 ### Configure local development
 
-Create or update `.env.local` in the repository root with:
+Create or update `.env` in the repository root with:
 
 ```dotenv
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
-GMAIL_USER=manav.shaji.m@gmail.com
+GMAIL_USER=your-account@gmail.com
 GMAIL_APP_PASSWORD=<YOUR_GMAIL_APP_PASSWORD>
-CONTACT_EMAIL=manav.shaji.m@gmail.com
+CONTACT_EMAIL=your-recipient@example.com
 ```
 
-`.env.local` is gitignored. Keep `GMAIL_APP_PASSWORD` server-side and never add a `NEXT_PUBLIC_` prefix to Gmail credentials. After editing the file, restart the Next.js development server, open [http://localhost:3000](http://localhost:3000), and submit a test enquiry. Confirm that it arrives at `manav.shaji.m@gmail.com`; then reply to the message and verify the reply is addressed to the visitor, whose address is set as `Reply-To`.
+Replace the sample addresses and password placeholder with your own values. `GMAIL_USER` must be the Gmail account that generated the App Password. `.env` is gitignored. Keep `GMAIL_APP_PASSWORD` server-side and never add a `NEXT_PUBLIC_` prefix to Gmail credentials. After editing the file, restart the Next.js development server, open [http://localhost:3000](http://localhost:3000), and submit a test enquiry. Confirm that it arrives at the configured recipient; then reply to the message and verify the reply is addressed to the visitor, whose address is set as `Reply-To`.
 
 The route validates input, enforces the hidden `company_url` honeypot and per-instance rate limit, limits request size, escapes HTML content, and uses SMTP connection/greeting/socket timeouts. Its errors do not reveal provider details or credentials.
 
@@ -56,13 +56,13 @@ The route validates input, enforces the hidden `company_url` honeypot and per-in
 In **Vercel → Portfolio-2 → Settings → Environment Variables**, add these values to the Production environment (and Preview/Development if needed):
 
 ```dotenv
-NEXT_PUBLIC_SITE_URL=https://manavshaji.de5.net
-GMAIL_USER=manav.shaji.m@gmail.com
+NEXT_PUBLIC_SITE_URL=https://your-domain.example
+GMAIL_USER=your-account@gmail.com
 GMAIL_APP_PASSWORD=<YOUR_GMAIL_APP_PASSWORD>
-CONTACT_EMAIL=manav.shaji.m@gmail.com
+CONTACT_EMAIL=your-recipient@example.com
 ```
 
-Save the variables and trigger a new deployment; changing environment variables does not update an already-built deployment. Do not paste the app password into source control, support messages, or client-side variables.
+Replace the sample domain and email addresses with your production values. Save the variables and trigger a new deployment; changing environment variables does not update an already-built deployment. Do not paste the app password into source control, support messages, or client-side variables.
 
 ### Troubleshooting
 
@@ -82,7 +82,7 @@ Save the variables and trigger a new deployment; changing environment variables 
 | `GMAIL_APP_PASSWORD` | Yes, for delivery | Google App Password for SMTP authentication; never expose it to client code |
 | `CONTACT_EMAIL` | Yes, for delivery | Valid recipient inbox for portfolio messages |
 
-`.env.local` is gitignored; do not commit it or real credentials.
+`.env` is gitignored; do not commit it or real credentials.
 
 ## Project structure
 
